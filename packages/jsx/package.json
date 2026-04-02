@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/jsx",
     "version": "0.1.1",
-    "description": "TSX component runtime for TermUI — React-like hooks & JSX for the terminal",
+    "description": "JSX runtime for TermUI with useState, useEffect, useContext, useAsync, and memo()",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

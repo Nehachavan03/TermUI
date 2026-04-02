@@ -1,14 +1,8 @@
 # create-termui-app
 
-Scaffold a new TermUI project. Pick a template, choose a theme, start building.
+Scaffold a new TermUI project. Pick a template, pick a theme, run `npm run dev`.
 
 ## Usage
-
-```bash
-npx create-termui-app my-app
-```
-
-Or with a project name directly:
 
 ```bash
 npx create-termui-app my-app
@@ -17,39 +11,44 @@ npm install
 npm run dev
 ```
 
-## Templates
+The CLI walks you through a few choices, then generates a working project.
 
-The CLI prompts you to choose:
+## Templates
 
 | Template | What you get |
 |----------|-------------|
-| Empty | Blank project, one file |
-| Dashboard | Real-time gauges and tables |
-| Interactive Tool | Forms, selects, and prompts |
-| CLI Wrapper | Wraps an existing shell command with a UI |
+| Empty | One file, no dependencies beyond core. Start from scratch |
+| Dashboard | Real-time gauges, tables, and a status bar |
+| Interactive Tool | Forms, selects, prompts. Good for CLI wizards |
+| CLI Wrapper | Wraps an existing shell command in a TermUI interface |
 
 ## Themes
 
-Five themes available at setup: Default, Cyberpunk, Nord, Dracula, Catppuccin.
+Choose one of five built-in themes during setup: Default, Cyberpunk, Nord, Dracula, or Catppuccin. You can change it later in `termui.config.ts`.
 
-## Features
+## Optional features
 
-You pick which features to include:
+The CLI asks which extras to include:
 
-- Screen Router (file-based navigation)
-- Data Providers (CPU, memory, disk)
-- Hot Reload (auto-restart on save)
+- **Screen Router** — file-based navigation between screens
+- **Data Providers** — CPU, memory, disk monitoring out of the box
+- **Hot Reload** — auto-restart on save via `@termuijs/dev-server`
+- **Testing** — Vitest config with `@termuijs/testing` ready to go
 
-## Generated files
+## Generated project
 
 ```
 my-app/
   package.json
   tsconfig.json
   termui.config.ts
-  themes/cyberpunk.tss
-  src/index.tsx
+  vitest.config.ts        (if testing selected)
+  themes/default.tss
+  src/
+    index.tsx
 ```
+
+Everything is TypeScript, and the dev server is preconfigured in the `dev` script.
 
 ## License
 

@@ -144,4 +144,31 @@ describe('EventEmitter', () => {
 
         expect(handler).not.toHaveBeenCalled();
     });
+
+    it('continues emitting if one handler throws', () => {
+        const emitter = new EventEmitter<TestEvents>();
+        const handler1 = vi.fn(() => { throw new Error('boom'); });
+        const handler2 = vi.fn();
+
+        emitter.on('message', handler1);
+        emitter.on('message', handler2);
+
+        // Should not throw, and handler2 should still be called
+        expect(() => emitter.emit('message', 'test')).not.toThrow();
+        expect(handler1).toHaveBeenCalled();
+        expect(handler2).toHaveBeenCalled();
+    });
+
+    it('once handlers that throw do not break regular handlers', () => {
+        const emitter = new EventEmitter<TestEvents>();
+        const onceHandler = vi.fn(() => { throw new Error('once boom'); });
+        const regularHandler = vi.fn();
+
+        emitter.once('message', onceHandler);
+        emitter.on('message', regularHandler);
+
+        expect(() => emitter.emit('message', 'test')).not.toThrow();
+        expect(onceHandler).toHaveBeenCalled();
+        expect(regularHandler).toHaveBeenCalled();
+    });
 });

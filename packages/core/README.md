@@ -1,6 +1,6 @@
 # @termuijs/core
 
-The rendering engine behind TermUI. Handles screen buffers, layout, input parsing, events, and styling.
+The rendering engine that sits at the bottom of the TermUI stack. Screen buffers, layout, input parsing, events, and styling. Everything else in the framework builds on this.
 
 ## Install
 
@@ -8,47 +8,45 @@ The rendering engine behind TermUI. Handles screen buffers, layout, input parsin
 npm install @termuijs/core
 ```
 
-## What you get
+## What's in the box
 
-- **Screen** - Double-buffered cell grid with diff-based rendering. Only changed cells get written to stdout.
-- **Renderer** - Converts the screen buffer into ANSI escape sequences at 60fps.
-- **LayoutEngine** - Flexbox-based layout: `flexDirection`, `flexGrow`, `flexShrink`, `alignItems`, `justifyContent`, percentage sizing.
-- **InputParser** - Parses raw stdin into typed key and mouse events. Handles escape sequences, Ctrl combos, and multi-byte characters.
-- **EventEmitter** - Typed event system with `on`, `off`, `once`, and `emit`.
-- **FocusManager** - Tab cycling, focus traps for modals, focus groups for arrow-key navigation.
-- **Style** - Color (RGB, hex, named), borders (single, double, rounded, bold), padding, margin.
-- **LayerManager** - Z-indexed overlay layers for modals and dropdowns.
-- **App** - Ties everything together. Mounts widgets, runs the render loop, dispatches input.
+- **Screen** — Double-buffered cell grid. Diffs the previous frame against the new one so only changed cells get written to stdout.
+- **LayoutEngine** — Flexbox-inspired positioning: `flexDirection`, `flexGrow`, `flexShrink`, `alignItems`, `justifyContent`, percentage sizing. All calculated in character cells.
+- **InputParser** — Converts raw stdin bytes into typed `KeyEvent` objects. Handles escape sequences, Ctrl combos, and multi-byte UTF-8.
+- **EventEmitter** — Type-safe `on`, `off`, `once`, `emit`. Events bubble from focused widget up through parents.
+- **FocusManager** — Tab cycling between widgets, focus traps for modals, focus groups for arrow key navigation within a panel.
+- **Style** — Colors (RGB, hex, named), border styles (single, double, rounded, bold), padding, margin.
+- **LayerManager** — Z-indexed overlays. Modals and dropdowns render above the base layer without z-fighting.
+- **App** — The entry point. Mounts your widget tree, starts the render loop, and routes input to the focused widget.
 
 ## Usage
 
 ```typescript
-import { App, Screen, Style } from '@termuijs/core';
+import { App, Screen, Style } from '@termuijs/core'
 
-const app = new App();
+const app = new App()
 
 // Screen is the cell buffer
-const screen = app.screen;
-screen.setCell(0, 0, { char: 'H', fg: 'red' });
+const screen = app.screen
+screen.setCell(0, 0, { char: 'H', fg: 'red' })
 
 // Start the render loop
-app.start();
+app.start()
 ```
 
 ## Event bubbling
 
-Key events bubble from the focused widget up through its parents. You stop propagation at any level.
+Key events start at the focused widget and bubble up through its parents. Stop propagation at any level.
 
 ```typescript
-import { createKeyEvent } from '@termuijs/core';
+import { createKeyEvent } from '@termuijs/core'
 
-// Events include stopPropagation() and preventDefault()
 widget.on('key', (event) => {
     if (event.key === 'enter') {
-        event.stopPropagation();
-        // handle it here, parents won't see it
+        event.stopPropagation()
+        // handled here, parents won't see it
     }
-});
+})
 ```
 
 ## Clip regions
@@ -56,15 +54,18 @@ widget.on('key', (event) => {
 Widgets clip their children by default. Nothing renders outside a widget's bounds.
 
 ```typescript
-// The screen maintains a clip stack
-screen.pushClip({ x: 5, y: 5, width: 20, height: 10 });
-// All setCell calls outside this rect are discarded
-screen.popClip();
+screen.pushClip({ x: 5, y: 5, width: 20, height: 10 })
+// setCell calls outside this rect are silently discarded
+screen.popClip()
 ```
+
+## Batched rendering
+
+State changes are batched via `queueMicrotask`. Multiple `setState` calls in the same tick produce a single render pass, not three.
 
 ## API reference
 
-See the [docs site](https://termuijs.dev/docs/core/overview) for the full API.
+Full docs at [termuijs.dev/docs/core/overview](https://termuijs.dev/docs/core/overview).
 
 ## License
 

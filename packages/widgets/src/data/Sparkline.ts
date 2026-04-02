@@ -36,10 +36,12 @@ export class Sparkline extends Widget {
 
     setData(data: number[]): void {
         this._data = data;
+        this.markDirty();
     }
 
     pushValue(value: number): void {
         this._data.push(value);
+        this.markDirty();
     }
 
     protected _renderSelf(screen: Screen): void {

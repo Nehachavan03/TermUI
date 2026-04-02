@@ -29,23 +29,23 @@ export class Select extends Widget {
     get selectedOption(): SelectOption | undefined { return this._options[this._selectedIndex]; }
     get selectedIndex(): number { return this._selectedIndex; }
     get isOpen(): boolean { return this._isOpen; }
-    open(): void { this._isOpen = true; }
-    close(): void { this._isOpen = false; }
-    toggle(): void { this._isOpen = !this._isOpen; }
+    open(): void { this._isOpen = true; this.markDirty(); }
+    close(): void { this._isOpen = false; this.markDirty(); }
+    toggle(): void { this._isOpen = !this._isOpen; this.markDirty(); }
 
     selectNext(): void {
         let n = this._selectedIndex + 1;
         while (n < this._options.length && this._options[n].disabled) n++;
-        if (n < this._options.length) this._selectedIndex = n;
+        if (n < this._options.length) { this._selectedIndex = n; this.markDirty(); }
     }
     selectPrev(): void {
         let n = this._selectedIndex - 1;
         while (n >= 0 && this._options[n].disabled) n--;
-        if (n >= 0) this._selectedIndex = n;
+        if (n >= 0) { this._selectedIndex = n; this.markDirty(); }
     }
     confirm(): void {
         const opt = this._options[this._selectedIndex];
-        if (opt && !opt.disabled) { this._onSelect?.(opt, this._selectedIndex); this._isOpen = false; }
+        if (opt && !opt.disabled) { this._onSelect?.(opt, this._selectedIndex); this._isOpen = false; this.markDirty(); }
     }
 
     protected _renderSelf(screen: Screen): void {

@@ -33,6 +33,11 @@ export function tail(filePath: string, opts: TailOptions = {}): TailStream {
         active: false,
         stop() {
             stream.active = false;
+            // Eagerly stop the watcher instead of waiting for next change event
+            if ((stream as any)._watchPath) {
+                fs.unwatchFile((stream as any)._watchPath);
+                (stream as any)._watchPath = null;
+            }
         },
     };
 
@@ -45,29 +50,37 @@ export function tail(filePath: string, opts: TailOptions = {}): TailStream {
 
             let fileSize = fs.statSync(filePath).size;
             stream.active = true;
+            (stream as any)._watchPath = filePath;
 
             // Watch for changes
             const watcher = fs.watchFile(filePath, { interval: 500 }, (curr) => {
                 if (!stream.active) {
                     fs.unwatchFile(filePath);
+                    (stream as any)._watchPath = null;
                     return;
                 }
 
                 if (curr.size > fileSize) {
-                    const fd = fs.openSync(filePath, 'r');
-                    const buffer = Buffer.alloc(curr.size - fileSize);
-                    fs.readSync(fd, buffer, 0, buffer.length, fileSize);
-                    fs.closeSync(fd);
+                    let fd: number | undefined;
+                    try {
+                        fd = fs.openSync(filePath, 'r');
+                        const buffer = Buffer.alloc(curr.size - fileSize);
+                        fs.readSync(fd, buffer, 0, buffer.length, fileSize);
 
-                    const newLines = buffer.toString('utf-8').split('\n').filter(l => l.length > 0);
-                    stream.lines.push(...newLines);
+                        const newLines = buffer.toString('utf-8').split('\n').filter(l => l.length > 0);
+                        stream.lines.push(...newLines);
 
-                    // Trim to max
-                    if (stream.lines.length > maxLines) {
-                        stream.lines = stream.lines.slice(-maxLines);
+                        // Trim to max
+                        if (stream.lines.length > maxLines) {
+                            stream.lines = stream.lines.slice(-maxLines);
+                        }
+
+                        fileSize = curr.size;
+                    } catch {
+                        // File may have been deleted/moved between stat and read
+                    } finally {
+                        if (fd !== undefined) fs.closeSync(fd);
                     }
-
-                    fileSize = curr.size;
                 } else if (curr.size < fileSize) {
                     // File was truncated — re-read
                     const content = fs.readFileSync(filePath, 'utf-8');

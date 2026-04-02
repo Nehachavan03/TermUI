@@ -39,6 +39,7 @@ export class LogView extends Widget {
         if (this._autoScroll) {
             this._scrollToBottom();
         }
+        this.markDirty();
     }
 
     appendLine(line: string): void {
@@ -46,6 +47,7 @@ export class LogView extends Widget {
         if (this._autoScroll) {
             this._scrollToBottom();
         }
+        this.markDirty();
     }
 
     scrollUp(n = 1): void {

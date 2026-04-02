@@ -33,9 +33,9 @@ export class Tree extends Widget {
         return result;
     }
 
-    selectNext(): void { const f = this._flatten(); if (this._cursorIndex < f.length - 1) this._cursorIndex++; }
-    selectPrev(): void { if (this._cursorIndex > 0) this._cursorIndex--; }
-    toggleExpand(): void { const f = this._flatten(); const it = f[this._cursorIndex]; if (it?.hasChildren) it.node.expanded = !it.node.expanded; }
+    selectNext(): void { const f = this._flatten(); if (this._cursorIndex < f.length - 1) { this._cursorIndex++; this.markDirty(); } }
+    selectPrev(): void { if (this._cursorIndex > 0) { this._cursorIndex--; this.markDirty(); } }
+    toggleExpand(): void { const f = this._flatten(); const it = f[this._cursorIndex]; if (it?.hasChildren) { it.node.expanded = !it.node.expanded; this.markDirty(); } }
     confirm(): void {
         const f = this._flatten(); const it = f[this._cursorIndex];
         if (it) { it.hasChildren ? this.toggleExpand() : this._onSelect?.(it.node, it.path); }

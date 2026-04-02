@@ -33,6 +33,11 @@ export interface WidgetEvents {
 
 let _widgetIdCounter = 0;
 
+/** Reset the widget ID counter (for testing only). */
+export function _resetWidgetIdCounter(): void {
+    _widgetIdCounter = 0;
+}
+
 /**
  * Base class for all TermUI widgets.
  *

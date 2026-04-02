@@ -1,6 +1,6 @@
 # @termuijs/ui
 
-High-level interactive components. Modals, selects, tabs, toasts, forms, and more.
+High-level interactive components built on top of `@termuijs/widgets`. Modals, selects, tabs, toasts, forms, a command palette, and a few more.
 
 ## Install
 
@@ -14,37 +14,46 @@ Requires `@termuijs/core` and `@termuijs/widgets`.
 
 | Component | What it does |
 |-----------|-------------|
-| `Select` | Dropdown selection with arrow-key navigation |
+| `Select` | Dropdown with arrow key navigation and filtering |
 | `MultiSelect` | Multiple selection with checkboxes |
-| `Modal` | Overlay dialog with focus trapping |
-| `Tabs` | Tab container with keyboard switching |
-| `Toast` | Timed notification popup |
-| `Form` | Groups inputs with validation and submit handling |
-| `Tree` | Collapsible tree view |
-| `ConfirmDialog` | Yes/No confirmation dialog |
-| `CommandPalette` | Fuzzy-search command launcher |
+| `Modal` | Overlay dialog. Traps focus so Tab stays inside |
+| `Tabs` | Tab container with keyboard switching (left/right arrows) |
+| `Toast` | Timed notification that auto-dismisses |
+| `Form` | Groups inputs together with validation and a submit handler |
+| `Tree` | Collapsible tree view for hierarchical data |
+| `ConfirmDialog` | Simple Yes/No dialog |
+| `CommandPalette` | Fuzzy-search command launcher (Ctrl+P style) |
 | `Divider` | Horizontal or vertical separator line |
-| `Spacer` | Flexible whitespace |
+| `Spacer` | Flexible whitespace between elements |
 
 ## Usage
 
 ```typescript
-import { Select, Modal, Toast } from '@termuijs/ui';
+import { Select, Modal, Toast, CommandPalette } from '@termuijs/ui'
 
 const select = new Select({
     label: 'Choose a color',
     options: ['Red', 'Green', 'Blue'],
     onSelect: (value) => console.log(value),
-});
+})
 
 const modal = new Modal({
     title: 'Confirm',
     content: 'Delete this file?',
     onClose: () => {},
-});
+})
 
-// Toasts auto-dismiss after a timeout
-Toast.show('File saved', { duration: 2000 });
+// Toasts auto-dismiss
+Toast.show('File saved', { duration: 2000 })
+
+// Command palette with fuzzy search
+const palette = new CommandPalette({
+    commands: [
+        { label: 'Open file', action: () => openFile() },
+        { label: 'Save', action: () => save() },
+        { label: 'Quit', action: () => app.exit() },
+    ],
+})
 ```
 
 ## License

@@ -14,15 +14,19 @@ export interface RouterEvents {
 export interface RouterOptions {
     /** Initial path */
     initialPath?: string;
+    /** Maximum history entries (default: 100) */
+    maxHistory?: number;
 }
 
 export class Router {
     private _routes: Route[] = [];
     private _history: string[] = [];
     private _currentMatch: RouteMatch | null = null;
+    private _maxHistory: number;
     readonly events = new EventEmitter<RouterEvents>();
 
     constructor(options: RouterOptions = {}) {
+        this._maxHistory = options.maxHistory ?? 100;
         if (options.initialPath) {
             this._history.push(options.initialPath);
         }
@@ -47,6 +51,10 @@ export class Router {
             return;
         }
         this._history.push(path);
+        // Prevent unbounded history growth
+        if (this._history.length > this._maxHistory) {
+            this._history = this._history.slice(-this._maxHistory);
+        }
         this._currentMatch = match;
         this.events.emit('navigate', match);
     }

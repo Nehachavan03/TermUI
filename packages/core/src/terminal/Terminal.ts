@@ -36,6 +36,13 @@ export class Terminal {
     private _cleanupHandlers: Array<() => void> = [];
     private _originalRawMode: boolean | undefined;
 
+    // Stored handler references for proper cleanup
+    private _resizeHandler: (() => void) | null = null;
+    private _exitHandler: (() => void) | null = null;
+    private _sigintHandler: (() => void) | null = null;
+    private _sigtermHandler: (() => void) | null = null;
+    private _restored = false;
+
     constructor(options: TerminalOptions = {}) {
         this.stdout = options.stdout ?? process.stdout;
         this.stdin = options.stdin ?? process.stdin;
@@ -44,14 +51,15 @@ export class Terminal {
         this._cols = this.stdout.columns ?? 80;
         this._rows = this.stdout.rows ?? 24;
 
-        // Listen for terminal resize
-        this.stdout.on('resize', () => {
+        // Listen for terminal resize (store ref for cleanup)
+        this._resizeHandler = () => {
             this._cols = this.stdout.columns ?? 80;
             this._rows = this.stdout.rows ?? 24;
             for (const handler of this._resizeHandlers) {
                 handler(this._cols, this._rows);
             }
-        });
+        };
+        this.stdout.on('resize', this._resizeHandler);
 
         // Set up cleanup on process exit
         this._setupCleanup();
@@ -142,9 +150,23 @@ export class Terminal {
 
     /**
      * Restore terminal to its original state.
+     * Removes all process signal handlers to prevent leaks.
      * Called automatically on SIGINT, SIGTERM, process exit.
      */
     restore(): void {
+        if (this._restored) return; // Prevent double-restore
+        this._restored = true;
+
+        // Remove process-level signal handlers to prevent leaks
+        if (this._exitHandler) process.off('exit', this._exitHandler);
+        if (this._sigintHandler) process.off('SIGINT', this._sigintHandler);
+        if (this._sigtermHandler) process.off('SIGTERM', this._sigtermHandler);
+
+        // Remove resize listener
+        if (this._resizeHandler) {
+            this.stdout.off('resize', this._resizeHandler);
+        }
+
         this.disableMouse();
         this.exitAltScreen();
         this.exitRawMode();
@@ -160,20 +182,20 @@ export class Terminal {
     }
 
     private _setupCleanup(): void {
-        const cleanup = () => {
+        const runCleanupHandlers = () => {
             for (const handler of this._cleanupHandlers) {
                 try { handler(); } catch { /* swallow */ }
             }
             this.restore();
         };
 
-        process.on('exit', cleanup);
-        process.on('SIGINT', () => { cleanup(); process.exit(130); });
-        process.on('SIGTERM', () => { cleanup(); process.exit(143); });
-        process.on('uncaughtException', (err) => {
-            cleanup();
-            console.error(err);
-            process.exit(1);
-        });
+        this._exitHandler = runCleanupHandlers;
+        this._sigintHandler = () => { runCleanupHandlers(); process.exit(130); };
+        this._sigtermHandler = () => { runCleanupHandlers(); process.exit(143); };
+
+        process.on('exit', this._exitHandler);
+        process.on('SIGINT', this._sigintHandler);
+        process.on('SIGTERM', this._sigtermHandler);
+        // NOTE: No uncaughtException handler — let errors propagate naturally
     }
 }

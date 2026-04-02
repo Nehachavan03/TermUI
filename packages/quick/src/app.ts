@@ -147,7 +147,7 @@ export class AppBuilder {
         }
 
         // Create the App
-        const appInstance = new App(root, { fullscreen: this._fullscreen });
+        const appInstance = new App(root, { fullscreen: this._fullscreen, skipFallback: true });
         this._app = appInstance;
 
         // ── Discover focusable widgets (List, TextInput) ──
@@ -184,7 +184,13 @@ export class AppBuilder {
 
         // ── Wire up key events: dispatch to focused widget + handle app bindings ──
         appInstance.events.on('key', (event: KeyEvent) => {
-            // 1. Check app-level key bindings first
+            // 1. Always handle Ctrl+C — cannot be overridden by user bindings
+            if (event.ctrl && event.key === 'c') {
+                appInstance.exit();
+                return;
+            }
+
+            // 2. Check app-level key bindings
             const action = this._keyMap[event.key];
             if (action) {
                 if (action === 'quit') {
@@ -199,12 +205,6 @@ export class AppBuilder {
                     appInstance.requestRender();
                     return;
                 }
-            }
-
-            // 2. Handle Ctrl+C to quit
-            if (event.ctrl && event.key === 'c') {
-                appInstance.exit();
-                return;
             }
 
             // 3. Tab cycles focus between focusable widgets

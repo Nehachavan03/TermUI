@@ -1,19 +1,33 @@
 #!/usr/bin/env node
 // ─────────────────────────────────────────────────────
 // termui dev — CLI entry point
+//
+// Usage:
+//   termui dev [rootDir] [--entry src/app.tsx]
 // ─────────────────────────────────────────────────────
 
 import { DevServer } from './server.js';
 
 const args = process.argv.slice(2);
-const rootDir = args[0] || '.';
+
+// Parse arguments
+let rootDir = '.';
+let entry: string | undefined;
+
+for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--entry' && args[i + 1]) {
+        entry = args[++i];
+    } else if (!args[i].startsWith('-')) {
+        rootDir = args[i];
+    }
+}
 
 const server = new DevServer({
     rootDir,
+    entry,
     devTools: true,
     onReload: (change) => {
-        // In a full implementation, this would re-execute the entry file
-        // For now, it logs the change for integration with the app lifecycle
+        // The server now handles restart automatically via child process
     },
 });
 

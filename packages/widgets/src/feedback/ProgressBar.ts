@@ -54,6 +54,7 @@ export class ProgressBar extends Widget {
     /** Set progress value (0–1) */
     setValue(value: number): void {
         this._value = Math.max(0, Math.min(1, value));
+        this.markDirty();
     }
 
     get value(): number { return this._value; }

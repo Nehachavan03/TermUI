@@ -42,6 +42,8 @@ export function generateProject(config: ProjectConfig): GeneratedFile[] {
                 '@termuijs/ui': 'latest',
                 '@termuijs/jsx': 'latest',
                 '@termuijs/tss': 'latest',
+                '@termuijs/quick': 'latest',
+                '@termuijs/motion': 'latest',
                 ...(config.features.dataProviders ? { '@termuijs/data': 'latest' } : {}),
                 ...(config.features.router ? { '@termuijs/router': 'latest' } : {}),
             },
@@ -112,13 +114,13 @@ export default defineConfig({
 function generateEmptyTemplate(config: ProjectConfig): GeneratedFile[] {
     return [{
         path: 'src/index.tsx',
-        content: `import { app } from '@termuijs/quick';
-import { Text, Box } from '@termuijs/ui';
+        content: `import { app, text } from '@termuijs/quick';
 
 app('${config.name}')
     .rows(
-        // Add your widgets here
+        text('Hello from TermUI! Edit src/index.tsx to get started.'),
     )
+    .keys({ q: 'quit' })
     .run();
 `,
     }];
@@ -130,27 +132,35 @@ function generateDashboardTemplate(config: ProjectConfig): GeneratedFile[] {
         content: `import { app, gauge, table, sparkline } from '@termuijs/quick';
 ${config.features.dataProviders ? "import { cpu, memory, disk, processes } from '@termuijs/data';" : ''}
 
+// Sample data for demo
+let cpuVal = 0.45;
+let memVal = 0.62;
+let dskVal = 0.38;
+
 app('⚡ ${config.name}')
     .rows(
         // Row 1: Gauges
-        app.cols(
-            gauge('CPU', () => ${config.features.dataProviders ? 'cpu.percent / 100' : '0.5'}),
-            gauge('MEM', () => ${config.features.dataProviders ? 'memory.percent / 100' : '0.3'}),
-            gauge('DSK', () => ${config.features.dataProviders ? 'disk.percent / 100' : '0.7'}),
-        ),
+        gauge('CPU', () => ${config.features.dataProviders ? 'cpu.percent / 100' : 'cpuVal'}),
+        gauge('MEM', () => ${config.features.dataProviders ? 'memory.percent / 100' : 'memVal'}),
+        gauge('DSK', () => ${config.features.dataProviders ? 'disk.percent / 100' : 'dskVal'}),
         // Row 2: Table
-        table('Processes', {
-            columns: ['Name', 'PID', 'CPU%', 'MEM%'],
-            data: () => ${config.features.dataProviders
+        table('Processes',
+            () => ${config.features.dataProviders
                 ? `processes.top(10).map(p => ({
                 Name: p.name.slice(0, 18),
                 PID: p.pid,
                 'CPU%': p.cpu.toFixed(1),
                 'MEM%': p.mem.toFixed(1),
             }))`
-                : `[{ Name: 'example', PID: 1234, 'CPU%': '5.0', 'MEM%': '2.1' }]`},
-        }),
+                : `[
+                { Name: 'node', PID: 1234, 'CPU%': '5.0', 'MEM%': '2.1' },
+                { Name: 'chrome', PID: 5678, 'CPU%': '12.3', 'MEM%': '8.4' },
+            ]`},
+            ['Name', 'PID', 'CPU%', 'MEM%'],
+        ),
     )
+    .keys({ q: 'quit', r: 'refresh' })
+    .refresh('1s')
     .run();
 `,
     }];
@@ -159,14 +169,19 @@ app('⚡ ${config.name}')
 function generateInteractiveTemplate(config: ProjectConfig): GeneratedFile[] {
     return [{
         path: 'src/index.tsx',
-        content: `import { app } from '@termuijs/quick';
-import { Form, Select, Toast, ConfirmDialog } from '@termuijs/ui';
+        content: `import { app, text, list, input } from '@termuijs/quick';
 
-// Interactive tool with forms, selects, and toasts
+const items = ['Option 1', 'Option 2', 'Option 3'];
+
 app('🔧 ${config.name}')
     .rows(
-        // Add your interactive components here
+        text('Select an option or type a command:'),
+        list(() => items),
+        input('Type here...', {
+            onSubmit: (value) => items.push(value),
+        }),
     )
+    .keys({ q: 'quit' })
     .run();
 `,
     }];
@@ -176,17 +191,23 @@ function generateCliWrapperTemplate(config: ProjectConfig): GeneratedFile[] {
     return [{
         path: 'src/index.tsx',
         content: `import { app, text, logView } from '@termuijs/quick';
-import { exec } from 'node:child_process';
 
-// CLI wrapper — runs a command and displays output
-const logs: string[] = [];
+// CLI wrapper — displays log output
+const logs: string[] = [
+    'INFO  Application started',
+    'INFO  Waiting for input...',
+    'DEBUG Press q to quit',
+];
 
 app('📟 ${config.name}')
     .rows(
-        text('Command output will appear below'),
-        logView('Output', () => logs),
+        text('Command output:'),
+        logView(() => logs),
     )
+    .keys({ q: 'quit' })
+    .refresh('1s')
     .run();
 `,
     }];
 }
+

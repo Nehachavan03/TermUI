@@ -35,18 +35,18 @@ export class Form extends Widget {
     }
 
     get values(): Record<string, string> { const r: Record<string, string> = {}; for (const [k, v] of this._values) r[k] = v; return r; }
-    nextField(): void { if (this._activeField < this._fields.length) { this._activeField++; this._cursorPos = 0; } }
-    prevField(): void { if (this._activeField > 0) { this._activeField--; this._cursorPos = (this._values.get(this._fields[this._activeField].name) ?? '').length; } }
+    nextField(): void { if (this._activeField < this._fields.length) { this._activeField++; this._cursorPos = 0; this.markDirty(); } }
+    prevField(): void { if (this._activeField > 0) { this._activeField--; this._cursorPos = (this._values.get(this._fields[this._activeField].name) ?? '').length; this.markDirty(); } }
     insertChar(ch: string): void {
         if (this._activeField >= this._fields.length) return;
         const f = this._fields[this._activeField]; const cur = this._values.get(f.name) ?? '';
         this._values.set(f.name, cur.slice(0, this._cursorPos) + ch + cur.slice(this._cursorPos));
-        this._cursorPos++; this._errors.delete(f.name);
+        this._cursorPos++; this._errors.delete(f.name); this.markDirty();
     }
     deleteBack(): void {
         if (this._activeField >= this._fields.length) return;
         const f = this._fields[this._activeField]; const cur = this._values.get(f.name) ?? '';
-        if (this._cursorPos > 0) { this._values.set(f.name, cur.slice(0, this._cursorPos - 1) + cur.slice(this._cursorPos)); this._cursorPos--; }
+        if (this._cursorPos > 0) { this._values.set(f.name, cur.slice(0, this._cursorPos - 1) + cur.slice(this._cursorPos)); this._cursorPos--; this.markDirty(); }
     }
     submit(): void {
         this._errors.clear(); let hasErr = false;
@@ -56,6 +56,7 @@ export class Form extends Widget {
             if (f.validate) { const e = f.validate(v); if (e) { this._errors.set(f.name, e); hasErr = true; } }
         }
         if (!hasErr) this._onSubmit?.(this.values);
+        this.markDirty();
     }
 
     protected _renderSelf(screen: Screen): void {

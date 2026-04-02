@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/dev-server",
     "version": "0.1.1",
-    "description": "Hot-reload dev server for TermUI — watch .tsx/.tss, DevTools panel",
+    "description": "File-watching dev server for TermUI that restarts your app on save",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

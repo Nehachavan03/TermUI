@@ -69,6 +69,7 @@ export class Table extends Widget {
 
     setRows(rows: TableRow[]): void {
         this._rows = rows;
+        this.markDirty();
     }
 
     protected _renderSelf(screen: Screen): void {

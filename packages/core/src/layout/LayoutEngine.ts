@@ -214,17 +214,17 @@ function layoutNode(node: LayoutNode, availWidth: number, availHeight: number, p
         // Set computed rect
         if (isRow) {
             info.node.computed = {
-                x: node.computed.x + innerX + mainOffset + info.margin.left,
-                y: node.computed.y + innerY + crossOffset + info.margin.top,
-                width: Math.max(0, info.mainSize - info.margin.left - info.margin.right),
-                height: Math.max(0, finalCrossSize - info.margin.top - info.margin.bottom),
+                x: Math.floor(node.computed.x + innerX + mainOffset + info.margin.left),
+                y: Math.floor(node.computed.y + innerY + crossOffset + info.margin.top),
+                width: Math.round(Math.max(0, info.mainSize - info.margin.left - info.margin.right)),
+                height: Math.round(Math.max(0, finalCrossSize - info.margin.top - info.margin.bottom)),
             };
         } else {
             info.node.computed = {
-                x: node.computed.x + innerX + crossOffset + info.margin.left,
-                y: node.computed.y + innerY + mainOffset + info.margin.top,
-                width: Math.max(0, finalCrossSize - info.margin.left - info.margin.right),
-                height: Math.max(0, info.mainSize - info.margin.top - info.margin.bottom),
+                x: Math.floor(node.computed.x + innerX + crossOffset + info.margin.left),
+                y: Math.floor(node.computed.y + innerY + mainOffset + info.margin.top),
+                width: Math.round(Math.max(0, finalCrossSize - info.margin.left - info.margin.right)),
+                height: Math.round(Math.max(0, info.mainSize - info.margin.top - info.margin.bottom)),
             };
         }
 

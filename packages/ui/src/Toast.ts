@@ -22,7 +22,7 @@ export class Toast extends Widget {
         this._maxVisible = options.maxVisible ?? 5;
     }
 
-    push(text: string, type: ToastType = 'info'): void { this._messages.push({ text, type, expireAt: Date.now() + this._durationMs }); }
+    push(text: string, type: ToastType = 'info'): void { this._messages.push({ text, type, expireAt: Date.now() + this._durationMs }); this.markDirty(); }
     info(text: string): void { this.push(text, 'info'); }
     success(text: string): void { this.push(text, 'success'); }
     warning(text: string): void { this.push(text, 'warning'); }

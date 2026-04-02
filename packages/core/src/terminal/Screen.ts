@@ -51,6 +51,20 @@ export function emptyCell(): Cell {
     };
 }
 
+/** Reset a cell in-place to default attributes (avoids allocation). */
+export function resetCell(cell: Cell): void {
+    cell.char = ' ';
+    cell.fg = { type: 'none' };
+    cell.bg = { type: 'none' };
+    cell.bold = false;
+    cell.italic = false;
+    cell.underline = false;
+    cell.dim = false;
+    cell.strikethrough = false;
+    cell.inverse = false;
+    cell.width = 1;
+}
+
 /** Check if two cells are visually identical */
 export function cellsEqual(a: Cell, b: Cell): boolean {
     return (
@@ -222,7 +236,7 @@ export class Screen {
     clear(): void {
         for (let r = 0; r < this._rows; r++) {
             for (let c = 0; c < this._cols; c++) {
-                this.back[r][c] = emptyCell();
+                resetCell(this.back[r][c]);
             }
         }
     }

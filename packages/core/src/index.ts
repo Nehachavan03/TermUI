@@ -21,6 +21,11 @@ export { computeLayout, createLayoutNode } from './layout/LayoutEngine.js';
 export type { LayoutNode } from './layout/LayoutEngine.js';
 export { emptyRect, containsPoint, shrinkRect, intersectRect, unionRect } from './layout/Rect.js';
 export type { Rect, Size } from './layout/Rect.js';
+export {
+    splitRect,
+    length, percentage, ratio, min, max, fill,
+} from './layout/ConstraintLayout.js';
+export type { Constraint } from './layout/ConstraintLayout.js';
 
 // ── Events ────────────────────────────────────────────
 export { EventEmitter } from './events/EventEmitter.js';
@@ -39,6 +44,21 @@ export {
     detectColorDepth, ColorDepth,
 } from './style/Color.js';
 export type { Color, NamedColor } from './style/Color.js';
+
+// ── Symbols ───────────────────────────────────────────
+export {
+    BorderSets, BarSets, ScrollbarSets, LineSets, Shade,
+    VERTICAL_BAR_SYMBOLS, HORIZONTAL_BAR_SYMBOLS,
+    BRAILLE_OFFSET, BRAILLE_DOTS,
+} from './style/symbols.js';
+export type { BorderSet, BarSet, ScrollbarSet, LineSet } from './style/symbols.js';
+
+// ── Test Backend ──────────────────────────────────────
+export {
+    createTestScreen, testScreenToString, testScreenSetCell,
+    testScreenGetCell, testScreenClear, testScreenSetString,
+} from './terminal/TestBackend.js';
+export type { TestScreen } from './terminal/TestBackend.js';
 
 // ── App ───────────────────────────────────────────────
 export { App } from './app/App.js';

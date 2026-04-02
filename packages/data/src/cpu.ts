@@ -13,6 +13,9 @@ interface CpuTimes {
 }
 
 let _prevCpus: os.CpuInfo[] | null = null;
+let _cachedDelta: { percent: number; perCore: number[] } | null = null;
+let _lastDeltaTime = 0;
+const CPU_CACHE_MS = 200; // Share same sample within a render cycle
 
 function getCpuDelta(): { percent: number; perCore: number[] } {
     const cpus = os.cpus();
@@ -49,16 +52,26 @@ function getCpuDelta(): { percent: number; perCore: number[] } {
     return { percent, perCore };
 }
 
+/** Get cached CPU delta (prevents double-call giving inconsistent readings) */
+function getCachedCpuDelta(): { percent: number; perCore: number[] } {
+    const now = Date.now();
+    if (!_cachedDelta || now - _lastDeltaTime > CPU_CACHE_MS) {
+        _cachedDelta = getCpuDelta();
+        _lastDeltaTime = now;
+    }
+    return _cachedDelta;
+}
+
 /** CPU data provider — all values reactive (call to sample) */
 export const cpu = {
     /** Overall CPU usage 0–100 */
     get percent(): number {
-        return getCpuDelta().percent;
+        return getCachedCpuDelta().percent;
     },
 
     /** Per-core CPU usage array (0–100 each) */
     get perCore(): number[] {
-        return getCpuDelta().perCore;
+        return getCachedCpuDelta().perCore;
     },
 
     /** Load averages [1min, 5min, 15min] */

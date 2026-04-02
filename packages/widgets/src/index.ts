@@ -17,6 +17,8 @@ export type { LogViewOptions } from './display/LogView.js';
 export { List } from './input/List.js';
 export type { ListItem } from './input/List.js';
 export { TextInput } from './input/TextInput.js';
+export { VirtualList } from './input/VirtualList.js';
+export type { VirtualListOptions } from './input/VirtualList.js';
 
 // ── Data Widgets ──────────────────────────────────────
 export { Table } from './data/Table.js';
@@ -27,9 +29,13 @@ export { Sparkline } from './data/Sparkline.js';
 export type { SparklineOptions } from './data/Sparkline.js';
 export { StatusIndicator } from './data/StatusIndicator.js';
 export type { StatusIndicatorOptions } from './data/StatusIndicator.js';
+export { BarChart } from './data/BarChart.js';
+export type { Bar, BarGroup, BarChartDirection, BarChartOptions } from './data/BarChart.js';
 
 // ── Feedback Widgets ──────────────────────────────────
 export { ProgressBar } from './feedback/ProgressBar.js';
 export type { ProgressBarOptions } from './feedback/ProgressBar.js';
 export { Spinner, SPINNER_FRAMES } from './feedback/Spinner.js';
 export type { SpinnerOptions } from './feedback/Spinner.js';
+export { Scrollbar } from './feedback/Scrollbar.js';
+export type { ScrollbarOrientation, ScrollbarOptions } from './feedback/Scrollbar.js';

@@ -29,13 +29,13 @@ export class CommandPalette extends Widget {
     }
 
     get visible(): boolean { return this._visible; }
-    show(): void { this._visible = true; this._query = ''; this._cursorPos = 0; this._selectedIndex = 0; this._filtered = [...this._commands]; }
-    hide(): void { this._visible = false; }
+    show(): void { this._visible = true; this._query = ''; this._cursorPos = 0; this._selectedIndex = 0; this._filtered = [...this._commands]; this.markDirty(); }
+    hide(): void { this._visible = false; this.markDirty(); }
     toggle(): void { this._visible ? this.hide() : this.show(); }
-    insertChar(ch: string): void { this._query = this._query.slice(0, this._cursorPos) + ch + this._query.slice(this._cursorPos); this._cursorPos++; this._filter(); }
-    deleteBack(): void { if (this._cursorPos > 0) { this._query = this._query.slice(0, this._cursorPos - 1) + this._query.slice(this._cursorPos); this._cursorPos--; this._filter(); } }
-    selectNext(): void { if (this._selectedIndex < this._filtered.length - 1) this._selectedIndex++; }
-    selectPrev(): void { if (this._selectedIndex > 0) this._selectedIndex--; }
+    insertChar(ch: string): void { this._query = this._query.slice(0, this._cursorPos) + ch + this._query.slice(this._cursorPos); this._cursorPos++; this._filter(); this.markDirty(); }
+    deleteBack(): void { if (this._cursorPos > 0) { this._query = this._query.slice(0, this._cursorPos - 1) + this._query.slice(this._cursorPos); this._cursorPos--; this._filter(); this.markDirty(); } }
+    selectNext(): void { if (this._selectedIndex < this._filtered.length - 1) { this._selectedIndex++; this.markDirty(); } }
+    selectPrev(): void { if (this._selectedIndex > 0) { this._selectedIndex--; this.markDirty(); } }
     confirm(): void { const c = this._filtered[this._selectedIndex]; if (c) { this.hide(); c.action(); } }
 
     private _filter(): void {

@@ -39,9 +39,10 @@ describe('parseColor', () => {
         expect(parseColor('none')).toEqual({ type: 'none' });
     });
 
-    it('throws for invalid colors', () => {
-        expect(() => parseColor('notacolor')).toThrow();
-        expect(() => parseColor('#xyz')).toThrow();
+    it('returns none for invalid/unknown colors (graceful fallback)', () => {
+        expect(parseColor('notacolor')).toEqual({ type: 'none' });
+        expect(parseColor('#xyz')).toEqual({ type: 'none' });
+        expect(parseColor('#zzzzzz')).toEqual({ type: 'none' });
     });
 
     it('clamps rgb values to 255', () => {

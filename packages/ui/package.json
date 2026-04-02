@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/ui",
     "version": "0.1.1",
-    "description": "Rich component library for TermUI — Modal, Tabs, Select, Form, Toast, and more",
+    "description": "Modal, Select, Tabs, Toast, Form, Tree, and CommandPalette for TermUI",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

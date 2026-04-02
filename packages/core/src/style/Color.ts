@@ -77,7 +77,8 @@ export function parseColor(input: string): Color {
         if (hex.length === 6 && /^[0-9a-fA-F]{6}$/.test(hex)) {
             return { type: 'hex', hex: '#' + hex.toLowerCase() };
         }
-        throw new Error(`Invalid hex color: ${input}`);
+        // Invalid hex — return none instead of crashing
+        return { type: 'none' };
     }
 
     // RGB color
@@ -96,7 +97,8 @@ export function parseColor(input: string): Color {
         return { type: 'ansi256', code };
     }
 
-    throw new Error(`Unknown color format: ${input}`);
+    // Unknown format — return none instead of crashing
+    return { type: 'none' };
 }
 
 /**

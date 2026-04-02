@@ -34,7 +34,7 @@ function parseDf(): DiskPartition[] {
 
                 // macOS: Filesystem Size Used Avail Capacity iused ifree %iused Mounted on
                 // Linux:  Filesystem Size Used Avail Use%   Mounted on
-                const percentIdx = isMac ? 4 : 4;
+                const percentIdx = isMac ? 7 : 4;
                 const percentStr = parts[percentIdx]?.replace('%', '');
                 // Mountpoint is always the last field
                 const mountpoint = parts[parts.length - 1];

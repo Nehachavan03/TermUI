@@ -19,6 +19,10 @@ export interface Fiber {
     effects: EffectRecord[];
     cleanups: (() => void)[];
     intervals: ReturnType<typeof setInterval>[];
+    /** Context values provided by this fiber's component */
+    contextValues: Map<symbol, any>;
+    /** Parent fiber for context lookup */
+    parent?: Fiber;
 }
 
 interface HookState {
@@ -40,7 +44,7 @@ let _requestRender: (() => void) | null = null;
 let _nextFiberId = 0;
 
 /** Get or throw the current fiber (hooks must be called inside a component) */
-function currentFiber(): Fiber {
+export function currentFiber(): Fiber {
     if (!_currentFiber) {
         throw new Error(
             'Hooks can only be called inside a functional component. ' +
@@ -62,7 +66,7 @@ export function clearCurrentFiber(): void {
 }
 
 /** Create a new Fiber for a component instance */
-export function createFiber(): Fiber {
+export function createFiber(parent?: Fiber): Fiber {
     return {
         id: _nextFiberId++,
         hooks: [],
@@ -71,6 +75,8 @@ export function createFiber(): Fiber {
         effects: [],
         cleanups: [],
         intervals: [],
+        contextValues: new Map(),
+        parent,
     };
 }
 
@@ -79,8 +85,29 @@ export function setRequestRender(fn: () => void): void {
     _requestRender = fn;
 }
 
-/** Schedule a re-render */
-function scheduleRender(): void {
+// ── Batched State Updates ──
+
+let _pendingUpdates = new Set<Fiber>();
+let _flushScheduled = false;
+
+/**
+ * Schedule a re-render. Multiple setState calls within the same
+ * microtask are batched into a single re-render cycle.
+ */
+function scheduleRender(fiber?: Fiber): void {
+    if (fiber) {
+        _pendingUpdates.add(fiber);
+    }
+    if (!_flushScheduled) {
+        _flushScheduled = true;
+        queueMicrotask(flushUpdates);
+    }
+}
+
+/** Flush all pending state updates in a single render pass */
+function flushUpdates(): void {
+    _flushScheduled = false;
+    _pendingUpdates.clear();
     _requestRender?.();
 }
 
@@ -117,7 +144,7 @@ export function useState<T>(initialValue: T | (() => T)): [T, (newValue: T | ((p
         if (!Object.is(prev, next)) {
             hookState.value = next;
             fiber.isDirty = true;
-            scheduleRender();
+            scheduleRender(fiber);
         }
     };
 
@@ -140,23 +167,20 @@ export function useEffect(effect: () => void | (() => void), deps?: any[]): void
 
     // Initialize or check deps
     if (idx >= fiber.hooks.length) {
-        fiber.hooks.push({ value: null, deps });
-        fiber.effects.push({ effect, deps, ran: false });
+        const record: EffectRecord = { effect, deps, ran: false };
+        fiber.hooks.push({ value: record, deps });
+        fiber.effects.push(record);
     } else {
         const prev = fiber.hooks[idx];
         const shouldRun = !deps || !prev.deps || deps.some((d, i) => !Object.is(d, prev.deps![i]));
 
         if (shouldRun) {
             prev.deps = deps;
-            // Find existing effect record or push a new one
-            const effectIdx = fiber.effects.findIndex(e => e === fiber.hooks[idx].value);
-            if (effectIdx >= 0) {
-                fiber.effects[effectIdx] = { effect, deps, ran: false };
-            } else {
-                const record = { effect, deps, ran: false };
-                fiber.hooks[idx].value = record;
-                fiber.effects.push(record);
-            }
+            // Update the existing record in-place (avoids duplicates)
+            const record = prev.value as EffectRecord;
+            record.effect = effect;
+            record.deps = deps;
+            record.ran = false;
         }
     }
 }
@@ -190,12 +214,17 @@ export function useInterval(callback: () => void, delayMs: number): void {
     const idx = fiber.hookIndex++;
 
     if (idx >= fiber.hooks.length) {
+        // First render: create the interval with a mutable callback ref
+        const callbackRef = { current: callback };
         const timer = setInterval(() => {
-            callback();
+            callbackRef.current();
             scheduleRender();
         }, delayMs);
-        fiber.hooks.push({ value: timer });
+        fiber.hooks.push({ value: { timer, callbackRef } });
         fiber.intervals.push(timer);
+    } else {
+        // Re-render: update the callback ref to avoid stale closure
+        fiber.hooks[idx].value.callbackRef.current = callback;
     }
 }
 
@@ -285,4 +314,73 @@ export function destroyFiber(fiber: Fiber): void {
     fiber.effects = [];
     fiber.cleanups = [];
     fiber.intervals = [];
+    fiber.contextValues.clear();
 }
+
+// ── Async Data Hook ──
+
+/**
+ * State shape returned by useAsync.
+ */
+export interface AsyncState<T> {
+    /** Resolved data (null while loading or on error) */
+    data: T | null;
+    /** True while the async function is executing */
+    loading: boolean;
+    /** Error object if the async function threw */
+    error: Error | null;
+    /** Call this to re-execute the async function */
+    refetch: () => void;
+}
+
+/**
+ * useAsync — load async data with automatic loading/error states.
+ *
+ * ```tsx
+ * function UserList() {
+ *     const { data, loading, error } = useAsync(() => fetchUsers(), []);
+ *     if (loading) return <Text>Loading...</Text>;
+ *     if (error) return <Text color="red">Error: {error.message}</Text>;
+ *     return <Table rows={data} columns={['name', 'email']} />;
+ * }
+ * ```
+ */
+export function useAsync<T>(
+    asyncFn: () => Promise<T>,
+    deps: any[] = [],
+): AsyncState<T> {
+    const [data, setData] = useState<T | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    // Track a version counter to ignore stale responses
+    const versionRef = useRef(0);
+
+    const refetch = useCallback(() => {
+        const version = ++versionRef.current;
+        setLoading(true);
+        setError(null);
+
+        asyncFn()
+            .then((result) => {
+                // Only update if this is still the latest request
+                if (versionRef.current === version) {
+                    setData(result);
+                    setLoading(false);
+                }
+            })
+            .catch((err) => {
+                if (versionRef.current === version) {
+                    setError(err instanceof Error ? err : new Error(String(err)));
+                    setLoading(false);
+                }
+            });
+    }, deps);
+
+    useEffect(() => {
+        refetch();
+    }, deps);
+
+    return { data, loading, error, refetch };
+}
+

@@ -2,7 +2,7 @@
 // TSS Watcher — hot-reloads .tss files on change
 // ─────────────────────────────────────────────────────
 
-import { watch, readFileSync, existsSync } from 'node:fs';
+import { watch, readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, extname } from 'node:path';
 import { ThemeEngine } from './engine.js';
 
@@ -68,7 +68,6 @@ export class TSSWatcher {
     /** Load all .tss files in the watched directory */
     loadAll(): void {
         if (!existsSync(this._dir)) return;
-        const { readdirSync } = require('node:fs');
         const files = readdirSync(this._dir, { recursive: true }) as string[];
         const tssSources: string[] = [];
         for (const file of files) {
@@ -84,10 +83,8 @@ export class TSSWatcher {
 
     private _reload(filename: string): void {
         try {
-            const fullPath = resolve(this._dir, filename);
-            if (!existsSync(fullPath)) return;
-            const source = readFileSync(fullPath, 'utf-8');
-            this._engine.load(source);
+            // Re-merge all .tss files instead of replacing with just the changed one
+            this.loadAll();
             this._onReload?.(filename);
         } catch (err) {
             this._onError?.(err as Error);

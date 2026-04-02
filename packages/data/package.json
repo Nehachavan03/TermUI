@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/data",
     "version": "0.1.1",
-    "description": "Real-time system data providers for TermUI — CPU, memory, disk, processes, network",
+    "description": "System data providers for TermUI: CPU, memory, disk, processes, network",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

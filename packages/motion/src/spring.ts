@@ -71,9 +71,13 @@ export function animateSpring(
     let state: SpringState = { value: from, velocity: 0, target: to, done: false };
     let rafId: ReturnType<typeof setTimeout> | null = null;
     const frameMs = 16; // ~60fps
+    let lastTime = Date.now();
 
     function tick() {
-        state = stepSpring(state, cfg, frameMs / 1000);
+        const now = Date.now();
+        const dt = (now - lastTime) / 1000; // Use wall-clock time for accurate physics
+        lastTime = now;
+        state = stepSpring(state, cfg, dt);
         onFrame(state.value);
         if (state.done) {
             onComplete?.();

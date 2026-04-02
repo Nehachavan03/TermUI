@@ -29,6 +29,11 @@ interface ComponentInstance {
 
 const _instanceMap = new Map<Widget, ComponentInstance>();
 
+// ── Parent fiber tracking ──
+// Tracks the currently-rendering fiber so child components
+// can inherit the parent reference for context lookups.
+let _parentFiber: Fiber | undefined = undefined;
+
 // ── Intrinsic element mapping ──
 
 /**  Map a string tag name to a Widget constructor call */
@@ -180,7 +185,11 @@ function renderComponent(
     props: Record<string, any>,
     children: VNode[],
 ): Widget {
-    const fiber = createFiber();
+    const fiber = createFiber(_parentFiber);
+
+    // Push this fiber as the parent for any child components
+    const prevParent = _parentFiber;
+    _parentFiber = fiber;
 
     // Set the current fiber context for hooks
     setCurrentFiber(fiber);
@@ -192,6 +201,9 @@ function renderComponent(
 
     // Reconcile the returned VNode into a real widget
     const widget = reconcile(vnode);
+
+    // Restore parent fiber
+    _parentFiber = prevParent;
 
     // Run effects after render
     runEffects(fiber);
@@ -216,6 +228,10 @@ function renderComponent(
 export function reRenderComponent(instance: ComponentInstance): Widget {
     const { fiber, component, props, children } = instance;
 
+    // Push this fiber as the parent for any child components
+    const prevParent = _parentFiber;
+    _parentFiber = fiber;
+
     setCurrentFiber(fiber);
     const vnode = component({ ...props, children: children.length === 1 ? children[0] : children });
     clearCurrentFiber();
@@ -224,11 +240,20 @@ export function reRenderComponent(instance: ComponentInstance): Widget {
     // TODO: Smart diffing in a future version
     const newWidget = reconcile(vnode);
 
+    // Restore parent fiber
+    _parentFiber = prevParent;
+
     runEffects(fiber);
     fiber.isDirty = false;
 
+    // Remove old widget from instance map to prevent memory leak
+    _instanceMap.delete(instance.widget);
+
     instance.widget = newWidget;
     instance.lastVNode = vnode;
+
+    // Re-register with new widget
+    _instanceMap.set(newWidget, instance);
 
     return newWidget;
 }

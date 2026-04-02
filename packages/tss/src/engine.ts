@@ -4,7 +4,7 @@
 
 import { tokenize } from './tokenizer.js';
 import { parse, type TSSStylesheet, type TSSRule, type TSSSelector, type TSSValue } from './parser.js';
-import type { Style, Color, BorderStyle } from '@termuijs/core';
+import { type Style, type Color, type BorderStyle, parseColor } from '@termuijs/core';
 
 export interface ThemeVariables {
     [key: string]: string;
@@ -187,15 +187,11 @@ export class ThemeEngine {
     }
 
     private _parseColor(val: string): Color | undefined {
-        if (val.startsWith('#')) {
-            return { type: 'hex', hex: val };
+        try {
+            const color = parseColor(val);
+            return color.type === 'none' ? undefined : color;
+        } catch {
+            return undefined;
         }
-        // Named colors
-        const namedColors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
-            'brightBlack', 'brightRed', 'brightGreen', 'brightYellow', 'brightBlue', 'brightMagenta', 'brightCyan', 'brightWhite'];
-        if (namedColors.includes(val)) {
-            return { type: 'named', name: val as any };
-        }
-        return undefined;
     }
 }

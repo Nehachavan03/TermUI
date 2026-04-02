@@ -30,6 +30,8 @@ export const http = {
                 method: 'GET',
                 signal: AbortSignal.timeout(5000),
             });
+            // Consume response body to prevent connection leaks
+            await res.text().catch(() => { });
             const latency = Date.now() - start;
 
             // Store latency history

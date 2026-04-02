@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/tss",
     "version": "0.1.1",
-    "description": "Terminal Style Sheets — CSS-inspired theming for CLI apps",
+    "description": "Terminal Style Sheets for TermUI: variables, selectors, and six built-in themes",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

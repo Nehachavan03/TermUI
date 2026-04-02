@@ -44,6 +44,7 @@ export class List extends Widget {
         this._items = items;
         this._selectedIndex = Math.min(this._selectedIndex, items.length - 1);
         this._clampScroll();
+        this.markDirty();
     }
 
     /** Move selection up */
@@ -53,6 +54,7 @@ export class List extends Widget {
         if (next >= 0) {
             this._selectedIndex = next;
             this._clampScroll();
+            this.markDirty();
         }
     }
 
@@ -63,6 +65,7 @@ export class List extends Widget {
         if (next < this._items.length) {
             this._selectedIndex = next;
             this._clampScroll();
+            this.markDirty();
         }
     }
 
@@ -125,7 +128,7 @@ export class List extends Widget {
     private _clampScroll(): void {
         const rect = this._getContentRect();
         const visibleHeight = rect.height;
-        if (visibleHeight <= 0) return;
+        if (visibleHeight <= 0) { this._scrollOffset = 0; return; }
 
         if (this._selectedIndex < this._scrollOffset) {
             this._scrollOffset = this._selectedIndex;

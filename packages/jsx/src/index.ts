@@ -19,14 +19,26 @@ export {
     useMemo,
     useRef,
     useCallback,
+    useAsync,
 } from './hooks.js';
+export type { AsyncState } from './hooks.js';
+
+// ── Context ──
+export { createContext, useContext } from './context.js';
+export type { Context } from './context.js';
+
+// ── Memoization ──
+export { memo } from './memo.js';
 
 // ── Render ──
 export { render, renderApp } from './render.js';
 export type { RenderOptions } from './render.js';
 
 // ── Reconciler (internal, but useful for testing) ──
-export { reconcile } from './reconciler.js';
+export { reconcile, unmountAll } from './reconciler.js';
+
+// ── Internal — used by @termuijs/testing ──
+export { setRequestRender } from './hooks.js';
 
 // ── Convenience alias ──
 /** h() — shorthand for createElement */

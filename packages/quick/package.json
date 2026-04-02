@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/quick",
     "version": "0.1.1",
-    "description": "High-level fluent API for TermUI — build any CLI app in 20-30 lines",
+    "description": "Fluent builder API for TermUI: gauges, tables, and dashboards in ~20 lines",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",

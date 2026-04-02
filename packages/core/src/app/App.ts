@@ -23,6 +23,8 @@ export interface AppOptions extends TerminalOptions {
     mouse?: boolean;
     /** Force fallback (static) rendering */
     forceFallback?: boolean;
+    /** Skip fallback detection — always run interactively. Default: false */
+    skipFallback?: boolean;
     /** Title to set on the terminal window */
     title?: string;
 }
@@ -96,7 +98,7 @@ export class App {
         if (this._mounted) return 0;
 
         // Check if we should use fallback mode
-        if (this._options.forceFallback || shouldUseFallback()) {
+        if (this._options.forceFallback || (!this._options.skipFallback && shouldUseFallback())) {
             this._renderFallback();
             return 0;
         }
@@ -249,8 +251,6 @@ export class App {
         if (this._exitResolve) {
             this._exitResolve(code);
             this._exitResolve = null;
-        } else {
-            process.exit(code);
         }
     }
 

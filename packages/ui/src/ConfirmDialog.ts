@@ -33,14 +33,15 @@ export class ConfirmDialog extends Widget {
     }
 
     get visible(): boolean { return this._visible; }
-    show(): void { this._visible = true; this._selected = 'confirm'; }
-    hide(): void { this._visible = false; }
-    selectConfirm(): void { this._selected = 'confirm'; }
-    selectCancel(): void { this._selected = 'cancel'; }
-    toggleSelection(): void { this._selected = this._selected === 'confirm' ? 'cancel' : 'confirm'; }
+    show(): void { this._visible = true; this._selected = 'confirm'; this.markDirty(); }
+    hide(): void { this._visible = false; this.markDirty(); }
+    selectConfirm(): void { this._selected = 'confirm'; this.markDirty(); }
+    selectCancel(): void { this._selected = 'cancel'; this.markDirty(); }
+    toggleSelection(): void { this._selected = this._selected === 'confirm' ? 'cancel' : 'confirm'; this.markDirty(); }
     confirm(): void {
         (this._selected === 'confirm' ? this._onConfirm : this._onCancel)?.();
         this._visible = false;
+        this.markDirty();
     }
 
     protected _renderSelf(screen: Screen): void {

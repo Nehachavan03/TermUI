@@ -33,6 +33,7 @@ export class Gauge extends Widget {
 
     setValue(value: number): void {
         this._value = Math.max(0, Math.min(1, value));
+        this.markDirty();
     }
 
     getValue(): number {
@@ -41,6 +42,7 @@ export class Gauge extends Widget {
 
     setLabel(label: string): void {
         this._label = label;
+        this.markDirty();
     }
 
     protected _renderSelf(screen: Screen): void {

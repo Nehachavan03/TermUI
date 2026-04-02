@@ -29,10 +29,10 @@ export class Modal extends Widget {
     }
 
     get visible(): boolean { return this._visible; }
-    show(): void { this._visible = true; }
-    hide(): void { this._visible = false; }
-    toggle(): void { this._visible = !this._visible; }
-    setContent(content: Widget): void { this._content = content; }
+    show(): void { this._visible = true; this.markDirty(); }
+    hide(): void { this._visible = false; this.markDirty(); }
+    toggle(): void { this._visible = !this._visible; this.markDirty(); }
+    setContent(content: Widget): void { this._content = content; this.markDirty(); }
 
     protected _renderSelf(screen: Screen): void {
         if (!this._visible) return;

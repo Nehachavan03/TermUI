@@ -1,7 +1,7 @@
 {
     "name": "@termuijs/widgets",
     "version": "0.1.1",
-    "description": "Widget library for TermUI — 20+ interactive terminal UI components",
+    "description": "Box, Text, Table, ProgressBar, Spinner, Gauge, VirtualList, and more for TermUI",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
