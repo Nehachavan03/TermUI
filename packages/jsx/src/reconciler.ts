@@ -223,6 +223,20 @@ function renderComponent(
 }
 
 /**
+ * Recursively remove _instanceMap entries for a widget and all its descendants.
+ * This prevents stale child instances from accumulating across re-renders.
+ */
+function _pruneInstancesForWidget(widget: Widget): void {
+    _instanceMap.delete(widget);
+    const children = (widget as any)._children ?? (widget as any).children ?? [];
+    if (Array.isArray(children)) {
+        for (const child of children) {
+            _pruneInstancesForWidget(child);
+        }
+    }
+}
+
+/**
  * Re-render a component (called when useState triggers a state change).
  */
 export function reRenderComponent(instance: ComponentInstance): Widget {
@@ -246,8 +260,8 @@ export function reRenderComponent(instance: ComponentInstance): Widget {
     runEffects(fiber);
     fiber.isDirty = false;
 
-    // Remove old widget from instance map to prevent memory leak
-    _instanceMap.delete(instance.widget);
+    // Remove old widget and all its descendant instances from the map to prevent memory leak
+    _pruneInstancesForWidget(instance.widget);
 
     instance.widget = newWidget;
     instance.lastVNode = vnode;
