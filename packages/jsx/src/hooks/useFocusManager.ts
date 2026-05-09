@@ -16,7 +16,7 @@
 //   }
 // ─────────────────────────────────────────────────────
 
-import { useState } from '../hooks.js';
+import { useState, useCallback } from '../hooks.js';
 import { FocusContext } from '../focus-context.js';
 import type { FocusContextValue } from '../focus-context.js';
 
@@ -46,8 +46,8 @@ export interface UseFocusManagerResult extends FocusContextValue {
 export function useFocusManager(): UseFocusManagerResult {
     const [focused, setFocused] = useState<string | null>(null);
 
-    const focus = (id: string) => setFocused(id);
-    const blur = () => setFocused(null);
+    const focus = useCallback((id: string) => setFocused(id), []);
+    const blur = useCallback(() => setFocused(null), []);
 
     return { focused, focus, blur, FocusContext };
 }
