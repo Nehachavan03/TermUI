@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { createStore } from './store.js'
+import { createStore, batch } from './store.js'
 
 describe('createStore', () => {
     it('initializes state from creator function', () => {
@@ -124,5 +124,137 @@ describe('createStore', () => {
         await useStore.getState().fetch()
         expect(useStore.getState().data).toBe('fetched data')
         expect(useStore.getState().loading).toBe(false)
+    })
+})
+
+describe('batch', () => {
+    it('coalesces multiple setState calls into a single listener notification', async () => {
+        const useStore = createStore((set) => ({
+            x: 0,
+            y: 0,
+            z: 0,
+        }))
+        const spy = vi.fn()
+        useStore.subscribe(spy)
+
+        batch(() => {
+            useStore.setState({ x: 1 })
+            useStore.setState({ y: 2 })
+            useStore.setState({ z: 3 })
+        })
+
+        // Still pending at this point
+        expect(spy).not.toHaveBeenCalled()
+
+        // Wait for microtask to drain
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        // All three setState calls should have been coalesced into one listener call
+        expect(spy).toHaveBeenCalledOnce()
+        expect(spy.mock.calls[0][0]).toEqual({ x: 1, y: 2, z: 3 })
+    })
+
+    it('all queued functions are executed', async () => {
+        const useStore = createStore((set) => ({
+            count: 0,
+        }))
+
+        const execOrder: string[] = []
+
+        batch(() => {
+            execOrder.push('fn1-start')
+            useStore.setState({ count: 1 })
+            execOrder.push('fn1-end')
+        })
+
+        batch(() => {
+            execOrder.push('fn2-start')
+            useStore.setState({ count: 2 })
+            execOrder.push('fn2-end')
+        })
+
+        // Batch callbacks execute immediately, but listener notifications are deferred
+        expect(execOrder).toEqual(['fn1-start', 'fn1-end', 'fn2-start', 'fn2-end'])
+
+        // Wait for microtask
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        // State should be updated
+        expect(useStore.getState().count).toBe(2)
+    })
+
+    it('final state is correct after batch updates', async () => {
+        const useStore = createStore((set) => ({
+            a: 0,
+            b: 0,
+        }))
+
+        batch(() => {
+            useStore.setState((s) => ({ a: s.a + 1 }))
+            useStore.setState((s) => ({ b: s.b + 10 }))
+            useStore.setState((s) => ({ a: s.a + 1 })) // should apply after previous updates
+        })
+
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        expect(useStore.getState()).toEqual({ a: 2, b: 10 })
+    })
+
+    it('nested batch calls work correctly', async () => {
+        const useStore = createStore((set) => ({
+            value: 0,
+        }))
+        const spy = vi.fn()
+        useStore.subscribe(spy)
+
+        batch(() => {
+            batch(() => {
+                useStore.setState({ value: 1 })
+            })
+            useStore.setState({ value: 2 })
+        })
+
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        // All updates should coalesce into one listener call
+        expect(spy).toHaveBeenCalledOnce()
+        expect(useStore.getState().value).toBe(2)
+    })
+
+    it('batch works with no state changes (no listeners fired)', async () => {
+        const useStore = createStore((set) => ({
+            value: 0,
+        }))
+        const spy = vi.fn()
+        useStore.subscribe(spy)
+
+        batch(() => {
+            // No actual state changes
+        })
+
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        // Listener should not be called since state didn't actually change
+        expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('batch preserves listener notification order for unchanged keys', async () => {
+        const useStore = createStore((set) => ({
+            a: 1,
+            b: 1,
+        }))
+        const spy = vi.fn()
+        useStore.subscribe(spy)
+
+        batch(() => {
+            useStore.setState({ a: 1 }) // No actual change
+            useStore.setState({ b: 2 }) // Change
+        })
+
+        await new Promise(resolve => queueMicrotask(resolve))
+
+        // Should still fire because b changed
+        expect(spy).toHaveBeenCalledOnce()
+        expect(spy.mock.calls[0][0]).toEqual({ a: 1, b: 2 })
     })
 })

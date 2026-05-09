@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from '@termuijs/jsx';
 import type { FC, VNode } from '@termuijs/jsx';
+import { caps } from '@termuijs/core';
 import { detectDark, defaultDark, defaultLight, systemTheme } from './tokens.js';
 import type { ThemeTokens } from './tokens.js';
 
@@ -39,10 +40,14 @@ export const AutoThemeProvider: FC<AutoThemeProviderProps> = (props) => {
         const handler = () => {
             setTheme(detectDark() ? dark : light);
         };
-        process.on('SIGWINCH', handler);
-        return () => {
-            process.off('SIGWINCH', handler);
-        };
+        if (caps.color) {
+            process.on('SIGWINCH', handler);
+            return () => {
+                process.off('SIGWINCH', handler);
+            };
+        }
+        // Without color support, skip SIGWINCH entirely
+        return () => {};
     }, [dark, light]);
 
     const childArray: VNode[] = Array.isArray(props.children)

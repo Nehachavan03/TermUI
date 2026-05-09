@@ -68,3 +68,17 @@ export const defaultLight: ThemeTokens = {
  * and select the appropriate theme.
  */
 export const systemTheme: ThemeTokens = detectDark() ? defaultDark : defaultLight;
+
+/**
+ * Bridge function: Convert ThemeTokens to TSS string format.
+ * Generates a @theme block that can be parsed by ThemeEngine.
+ *
+ * @example
+ * const tssString = tokensToTSS('custom', draculaTheme);
+ * // "@theme custom {\n  --bg: #282a36;\n  --fg: #f8f8f2;\n  ...\n}"
+ */
+export function tokensToTSS(name: string, tokens: ThemeTokens): string {
+    return `@theme ${name} {\n` +
+        Object.entries(tokens).map(([k, v]) => `  --${k}: ${v};`).join('\n') +
+        '\n}';
+}

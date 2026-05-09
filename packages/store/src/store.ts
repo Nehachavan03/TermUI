@@ -22,6 +22,52 @@
 
 import { useState, useEffect, useRef } from '@termuijs/jsx';
 
+// ── Batch Mechanism ──
+
+let _batchDepth = 0;
+// Map store instance to { listeners, prevState, nextState }
+const _batchStores = new Map<Set<any>, { prevState: any; nextState: any }>();
+
+/**
+ * Batch multiple state updates into a single render pass.
+ *
+ * Coalesces all setState calls within the same microtask tick
+ * into a single reconciler update, reducing unnecessary re-renders.
+ *
+ * ```tsx
+ * // Without batch: 3 re-renders
+ * store.setState({ x: 1 });
+ * store.setState({ y: 2 });
+ * store.setState({ z: 3 });
+ *
+ * // With batch: 1 re-render
+ * batch(() => {
+ *     store.setState({ x: 1 });
+ *     store.setState({ y: 2 });
+ *     store.setState({ z: 3 });
+ * });
+ * ```
+ */
+export function batch(fn: () => void): void {
+    _batchDepth++;
+    try {
+        fn();
+    } finally {
+        _batchDepth--;
+        if (_batchDepth === 0) {
+            queueMicrotask(() => {
+                const stores = Array.from(_batchStores.entries());
+                _batchStores.clear();
+                for (const [listeners, { prevState, nextState }] of stores) {
+                    for (const listener of listeners) {
+                        listener(nextState, prevState);
+                    }
+                }
+            });
+        }
+    }
+}
+
 // ── Types ──
 
 export type SetState<T> = (
@@ -94,8 +140,20 @@ export function createStore<T extends object>(
         );
         if (hasChanged) {
             state = nextState;
-            for (const listener of listeners) {
-                listener(state, prevState);
+            if (_batchDepth > 0) {
+                // We're in a batch: defer listener notifications and track the final state
+                const existing = _batchStores.get(listeners);
+                if (!existing) {
+                    _batchStores.set(listeners, { prevState, nextState });
+                } else {
+                    // Update to the new nextState, but keep the original prevState
+                    existing.nextState = nextState;
+                }
+            } else {
+                // Not in a batch: notify immediately
+                for (const listener of listeners) {
+                    listener(state, prevState);
+                }
             }
         }
     };

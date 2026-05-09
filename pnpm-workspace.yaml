@@ -1,5 +1,4 @@
 packages:
   - "packages/*"
   - "examples/*"
-  - "scratch/sprint2-test"
   - "website"
