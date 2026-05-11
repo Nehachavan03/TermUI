@@ -2,7 +2,7 @@
 // @termuijs/widgets — Tests for StreamingText widget
 // ─────────────────────────────────────────────────────
 
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { timerPoolUnsubscribeAll } from '@termuijs/motion';
 import { Screen, caps } from '@termuijs/core';
 import { StreamingText } from './StreamingText.js';
@@ -189,6 +189,10 @@ describe('StreamingText – cursor hidden', () => {
 
 // ── 8. mount/unmount lifecycle ────────────────────────────────────────────────
 describe('StreamingText – lifecycle', () => {
+    let origMotion: boolean;
+    beforeEach(() => { origMotion = caps.motion; (caps as any).motion = true; });
+    afterEach(() => { (caps as any).motion = origMotion; });
+
     it('mount() sets up _blinkUnsub', () => {
         const widget = new StreamingText({ text: 'Hello' });
         expect((widget as any)._blinkUnsub).toBeUndefined();
