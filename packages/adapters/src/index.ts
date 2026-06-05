@@ -18,6 +18,7 @@ export type {
 
 export { zodValidator } from './zod/index.js'
 export type { PromptValidator } from './zod/index.js'
+export { chalkToTermUI } from './chalk/index.js'
 
 export { useAI } from './ai/index.js'
 export type {
@@ -26,3 +27,7 @@ export type {
   AIOptions,
   AIProvider,
 } from './ai/index.js'
+
+export { useDotenv } from './dotenv/index.js'
+export type { DotenvValues, UseDotenvResult } from './dotenv/index.js'
+
