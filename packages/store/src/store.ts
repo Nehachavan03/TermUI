@@ -19,12 +19,13 @@
 //       return <Text>Count: {count}</Text>;
 //   }
 // ─────────────────────────────────────────────────────
-
+import { produce } from 'immer';
 import { useState, useEffect, useRef } from '@termuijs/jsx';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import type { EqualityFn } from './shallow.js'
+
 
 // ── Batch Mechanism ──
 
@@ -161,11 +162,9 @@ export interface Computed<U> {
 }
 
 export interface Store<T> {
-    /** Get the current state */
     getState(): T;
-    /** Set partial state (like React's setState) */
     setState: SetState<T>;
-    /** Subscribe to state changes */
+    mutate(recipe: (draft: T) => void): void;
     subscribe(listener: Listener<T>): () => void;
     /** Subscribe once — listener fires on the next change and is immediately unsubscribed */
     subscribeOnce(listener: Listener<T>): () => void;
@@ -179,7 +178,6 @@ export interface Store<T> {
     /** Read the state captured at creation */
     getInitialState(): T;
 }
-
 // ── Store Implementation ──
 
 /**
@@ -380,7 +378,34 @@ export function createStore<T extends object>(
             writeTimeout = null;
         }
     };
-
+    const mutate = (recipe: (draft: T) => void): void => {
+        const prevState = state;
+        const nextState = produce(state, (draft) => {
+            recipe(draft as T);
+        });
+        if (Object.is(prevState, nextState)) {
+            return;
+        }
+        state = nextState;
+        if (_batchDepth > 0) {
+            const existing = _batchStores.get(listeners);
+            if (!existing) {
+                _batchStores.set(listeners, {
+                    prevState,
+                    nextState,
+                    commit: () => { state = nextState; persistState(); },
+                    rollback: (s) => { state = s; },
+                });
+            } else {
+                existing.nextState = nextState;
+            }
+        } else {
+            for (const listener of listeners) {
+                listener(nextState, prevState);
+            }
+            persistState();
+        }
+    };
     // Initialize state (supports creator functions or plain objects)
     state = typeof creator === 'function'
         ? (creator as StateCreator<T>)(setState, getState)
@@ -447,7 +472,7 @@ export function createStore<T extends object>(
         };
     };
 
-    const store: Store<T> = { getState, setState, subscribe, subscribeOnce, destroy, computed, reset, getInitialState };
+    const store: Store<T> = { getState, setState, mutate, subscribe, subscribeOnce, destroy, computed, reset, getInitialState };
 
     // Create the hook function
     function useStore(): T;
@@ -486,6 +511,7 @@ export function createStore<T extends object>(
     // Type assertion needed to attach methods to the hook function beyond its call signature
     (useStore as any).getState = getState;
     (useStore as any).setState = setState;
+    (useStore as any).mutate = mutate;
     (useStore as any).subscribe = subscribe;
     (useStore as any).subscribeOnce = subscribeOnce;
     (useStore as any).destroy = destroy;
@@ -503,6 +529,7 @@ export interface UseStore<T> {
     <U>(selector: Selector<T, U>): U;
     getState: GetState<T>;
     setState: SetState<T>;
+    mutate(recipe: (draft: T) => void): void;
     subscribe(listener: Listener<T>): () => void;
     subscribeOnce(listener: Listener<T>): () => void;
     destroy(): void;
