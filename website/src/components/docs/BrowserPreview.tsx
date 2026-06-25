@@ -1,5 +1,11 @@
 'use client'
 
+// App.requestRender() uses setImmediate — not available in browser with Turbopack
+if (typeof (globalThis as any).setImmediate === 'undefined') {
+    ;(globalThis as any).setImmediate = (fn: () => void) => setTimeout(fn, 0)
+    ;(globalThis as any).clearImmediate = clearTimeout
+}
+
 import { useEffect, useRef } from 'react'
 import type { RootWidget, AppOptions } from '@termuijs/core'
 import { App, ColorDepth } from '@termuijs/core'
