@@ -60,3 +60,36 @@
     color: var(--text-primary);
     white-space: pre;
 }
+.cd-collapsible {
+    position: relative;
+}
+.cd-collapsible:not(.is-open) .cd-collapsible-body .cd-code-body {
+    max-height: 22rem;
+    overflow: hidden;
+}
+.cd-collapsible-fade {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 2.5rem;
+    height: 5rem;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--bg-secondary));
+}
+.cd-collapsible-toggle {
+    display: block;
+    width: 100%;
+    padding: var(--space-2);
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-tertiary);
+    color: var(--accent);
+    font-family: var(--font-code);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.cd-collapsible-toggle:hover {
+    background: var(--accent-glow);
+}

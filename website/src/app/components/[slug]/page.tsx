@@ -7,6 +7,8 @@ import { CodeTabs, TabsList, TabsTrigger, TabsContent } from '@/components/docs/
 import { ApiTable } from '@/components/docs/ApiTable'
 import { BrowserPreviewLoader } from '@/components/docs/BrowserPreviewLoader'
 import { getComponentSource } from '@/lib/component-source'
+import { Code } from '@/components/docs/Code'
+import { CodeCollapsible } from '@/components/docs/CodeCollapsible'
 import demoSlugs from '../../../data/demoSlugs'
 
 interface RegistryEntry {
@@ -110,6 +112,8 @@ const PREVIEW: Record<string, (n: string, d: string) => string> = {
         `  └────────────────────────────────────────────┘`,
     ].join('\n'),
 }
+
+const isLong = (code: string) => code.split('\n').length > 15
 
 /* ── Usage snippets per category ── */
 function getUsageSnippet(comp: RegistryEntry): string {
@@ -316,7 +320,9 @@ export default async function ComponentDetailPage({
                                         <p className="cd-step-label">
                                             Create <code>src/components/{comp.slug}/{source.filePath}</code> with:
                                         </p>
-                                        <pre className="cd-code-block"><code>{source.content}</code></pre>
+                                        <CodeCollapsible collapsed={isLong(source.content)}>
+                                            <Code code={source.content} lang="tsx" filename={source.filePath} />
+                                        </CodeCollapsible>
                                         {source.dependencies.length > 0 && (
                                             <>
                                                 <p className="cd-step-label">Then install:</p>
@@ -348,8 +354,10 @@ export default async function ComponentDetailPage({
                     {/* Usage */}
                     <section className="cd-section" id="usage">
                         <h2 className="cd-section-heading">Usage</h2>
-                        <pre className="cd-code-block"><code>{importLine}</code></pre>
-                        <pre className="cd-code-block"><code>{usageSnip}</code></pre>
+                        <Code code={importLine} lang="ts" />
+                        <CodeCollapsible collapsed={isLong(usageSnip)}>
+                            <Code code={usageSnip} lang="tsx" />
+                        </CodeCollapsible>
                     </section>
 
                     {/* API Reference */}
