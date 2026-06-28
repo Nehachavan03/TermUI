@@ -179,19 +179,18 @@ async function main(): Promise<void> {
   writeFileSync(registryPath, JSON.stringify(entries, null, 2));
   console.log(`✓ registry.json — ${entries.length} entries`);
 
-  // Write per-component JSON to public/r/
-  const publicDir = join(ROOT, 'public', 'r');
-  mkdirSync(publicDir, { recursive: true });
-
-  for (const entry of entries) {
-    const out = join(publicDir, `${entry.slug}.json`);
-    writeFileSync(out, JSON.stringify(entry, null, 2));
+  // Write per-component JSON to both the repo-root public/r/ (local dev / CLI
+  // smoke tests) and website/public/r/ — the latter is what Next serves at
+  // https://termui.io/r/<slug>.json, which `termuijs add` fetches.
+  const targets = [join(ROOT, 'public', 'r'), join(ROOT, 'website', 'public', 'r')];
+  for (const publicDir of targets) {
+    mkdirSync(publicDir, { recursive: true });
+    for (const entry of entries) {
+      writeFileSync(join(publicDir, `${entry.slug}.json`), JSON.stringify(entry, null, 2));
+    }
+    writeFileSync(join(publicDir, 'registry.json'), JSON.stringify(entries, null, 2));
+    console.log(`✓ ${publicDir.replace(ROOT + '/', '')} — ${entries.length} files + registry.json`);
   }
-  console.log(`✓ public/r/ — ${entries.length} component files`);
-
-  // Write master public/r/registry.json
-  writeFileSync(join(publicDir, 'registry.json'), JSON.stringify(entries, null, 2));
-  console.log('✓ public/r/registry.json');
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
