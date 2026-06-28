@@ -1,5 +1,27 @@
 import { describe, it, expect } from 'vitest';
-import { buildRegistryEntries, toSlug, detectCategory, rewriteImports, collectDeps } from './build-registry.js';
+import { buildRegistryEntries, toSlug, detectCategory, rewriteImports, collectDeps, extractDescription } from './build-registry.js';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+const PKG = join(import.meta.dirname ?? __dirname, '..', 'packages');
+
+describe('extractDescription recovery', () => {
+  it('recovers a JSDoc separated from its export by a statement (Markdown)', () => {
+    const src = readFileSync(join(PKG, 'widgets/src/display/Markdown.ts'), 'utf-8');
+    const d = extractDescription(src, 'Markdown');
+    expect(d).not.toBe('Markdown component');
+    expect(d.length).toBeGreaterThan(10);
+  });
+  it('binds a JSDoc to its real symbol, not a later export (QRCodePattern)', () => {
+    const src = readFileSync(join(PKG, 'widgets/src/display/QRCode.ts'), 'utf-8');
+    const d = extractDescription(src, 'QRCodePattern');
+    expect(d).not.toBe('QRCodePattern component');
+  });
+  it('recovers a top-of-file line comment (Carousel)', () => {
+    const src = readFileSync(join(PKG, 'widgets/src/display/Carousel.ts'), 'utf-8');
+    const d = extractDescription(src, 'Carousel');
+    expect(d).not.toBe('Carousel component');
+  });
+});
 
 describe('rewriteImports', () => {
   it('rewrites relative imports to the package specifier', () => {

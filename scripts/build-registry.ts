@@ -83,24 +83,57 @@ function extractExportedNames(content: string): string[] {
   return names.filter(n => !n.startsWith('_') && !/Options$|Props$|Type$|Interface$/.test(n));
 }
 
-function extractDescription(content: string, name: string): string {
-  // Look for JSDoc comment before the export
-  const re = new RegExp(`/\\*\\*([^*]|\\*(?!/))*\\*/\\s*(?:export\\s+(?:class|function|const)\\s+${name})`, 's');
-  const m = re.exec(content);
-  if (m) {
-    const comment = m[0].match(/\/\*\*([\s\S]*?)\*\//)?.[1] ?? '';
-    return comment.replace(/^\s*\*\s?/gm, '').replace(/\n/g, ' ').trim().split('.')[0] ?? '';
-  }
-  // Fallback: first line comment above the export
-  const lines = content.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i]?.match(new RegExp(`export\\s+(?:class|function|const)\\s+${name}`))) {
-      for (let j = i - 1; j >= Math.max(0, i - 5); j--) {
-        const line = lines[j]?.trim() ?? '';
-        if (line.startsWith('//')) return line.replace(/^\/\/\s*/, '');
-        if (line && !line.startsWith('*') && !line.startsWith('/*')) break;
-      }
+/** Turn a JSDoc or line-comment body into a one-line summary. */
+function cleanSummary(raw: string): string {
+  return raw
+    .replace(/^\s*\*\s?/gm, '')
+    .replace(/\n/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split('. ')[0]!
+    .replace(/\.$/, '')
+    .trim();
+}
+
+/**
+ * Description for an exported symbol. Binds a JSDoc block to the next export
+ * that follows it, so a statement between the doc and the export no longer
+ * drops the text. Falls back to a contiguous line comment, then a whole-file
+ * `// Name ...` comment, then a generic label.
+ */
+export function extractDescription(content: string, name: string): string {
+  const jsdoc = /\/\*\*([\s\S]*?)\*\//g;
+  let m: RegExpExecArray | null;
+  while ((m = jsdoc.exec(content)) !== null) {
+    const after = content.slice(jsdoc.lastIndex);
+    // Bind the doc to the next EXPORTED declaration; a private helper (e.g.
+    // `function hashString`) between the doc and the export is skipped so the
+    // text reaches the real registry symbol.
+    const next = /^[ \t]*export\s+(?:default\s+)?(?:abstract\s+)?(?:class|function|const|async function)\s+(\w+)/m.exec(after);
+    if (next && next[1] === name) {
+      const summary = cleanSummary(m[1]!);
+      if (summary) return summary;
     }
+  }
+  const lines = content.split('\n');
+  const exportRe = new RegExp(`export\\s+(?:default\\s+)?(?:abstract\\s+)?(?:class|function|const|async function)\\s+${name}\\b`);
+  for (let i = 0; i < lines.length; i++) {
+    if (exportRe.test(lines[i]!)) {
+      const acc: string[] = [];
+      for (let j = i - 1; j >= 0; j--) {
+        const line = lines[j]!.trim();
+        if (line.startsWith('//')) { acc.unshift(line.replace(/^\/\/\s?/, '')); continue; }
+        if (line === '') { if (acc.length) break; else continue; }
+        break;
+      }
+      if (acc.length) { const s = cleanSummary(acc.join(' ')); if (s) return s; }
+      break;
+    }
+  }
+  const named = new RegExp(`^\\s*//\\s*${name}\\b[^\\n]*`, 'm').exec(content);
+  if (named) {
+    const s = cleanSummary(named[0].replace(/^\s*\/\/\s?/, '').replace(new RegExp(`^${name}\\s*[-:\\u2014]?\\s*`), ''));
+    if (s) return s;
   }
   return `${name} component`;
 }
