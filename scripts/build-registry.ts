@@ -91,6 +91,11 @@ function cleanSummary(raw: string): string {
     .replace(/^\s*\*\s?/gm, '')
     .replace(/\n/g, ' ')
     .replace(/\s+/g, ' ')
+    // Source JSDoc uses the `Name — summary` house style. Strip the em dash so
+    // descriptions match the site's no-em-dash rule: first one reads as a colon,
+    // any later one as a comma.
+    .replace(/\s*—\s*/, ': ')
+    .replace(/\s*—\s*/g, ', ')
     .trim()
     .split('. ')[0]!
     .replace(/\.$/, '')
@@ -106,17 +111,22 @@ function cleanSummary(raw: string): string {
 export function extractDescription(content: string, name: string): string {
   const jsdoc = /\/\*\*([\s\S]*?)\*\//g;
   let m: RegExpExecArray | null;
+  // Bind to the JSDoc CLOSEST to the export, not the first that matches. An
+  // options interface with field-level docs (e.g. `/** Variant ... */`) sits
+  // before the class and shares the same next-export, so the first match is a
+  // field comment. Keep the last matching block, which is the class doc.
+  let closest: string | null = null;
   while ((m = jsdoc.exec(content)) !== null) {
     const after = content.slice(jsdoc.lastIndex);
-    // Bind the doc to the next EXPORTED declaration; a private helper (e.g.
-    // `function hashString`) between the doc and the export is skipped so the
-    // text reaches the real registry symbol.
+    // The next EXPORTED declaration; a private helper (e.g. `function
+    // hashString`) between the doc and the export is skipped.
     const next = /^[ \t]*export\s+(?:default\s+)?(?:abstract\s+)?(?:class|function|const|async function)\s+(\w+)/m.exec(after);
     if (next && next[1] === name) {
       const summary = cleanSummary(m[1]!);
-      if (summary) return summary;
+      if (summary) closest = summary;
     }
   }
+  if (closest) return closest;
   const lines = content.split('\n');
   const exportRe = new RegExp(`export\\s+(?:default\\s+)?(?:abstract\\s+)?(?:class|function|const|async function)\\s+${name}\\b`);
   for (let i = 0; i < lines.length; i++) {

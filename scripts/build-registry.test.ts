@@ -21,6 +21,14 @@ describe('extractDescription recovery', () => {
     const d = extractDescription(src, 'Carousel');
     expect(d).not.toBe('Carousel component');
   });
+  it('binds to the class doc, not a field comment in the options interface (Badge)', () => {
+    const src = readFileSync(join(PKG, 'widgets/src/display/Badge.ts'), 'utf-8');
+    const d = extractDescription(src, 'Badge');
+    // Badge.ts has a `/** Variant determines background color. */` field doc
+    // before the class. The class doc starts "Badge — a short inline label".
+    expect(d.toLowerCase()).toContain('badge');
+    expect(d).not.toContain('Variant determines');
+  });
 });
 
 describe('extractApi', () => {

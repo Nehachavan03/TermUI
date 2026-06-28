@@ -4,7 +4,7 @@
     "slug": "breadcrumbs",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Separator drawn between segments",
+    "description": "Breadcrumbs: renders a non-interactive path trail of segments with separators and truncation",
     "tags": [
       "display",
       "breadcrumbs"
@@ -84,7 +84,7 @@
     "slug": "tag",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Variant determines border and text color",
+    "description": "Tag: a short inline label with a colored border and no background fill",
     "tags": [
       "display",
       "tag"
@@ -129,7 +129,7 @@
     "slug": "ordered-list",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Nested items",
+    "description": "OrderedList: renders a numbered list with optional nesting",
     "tags": [
       "display",
       "ordered-list"
@@ -164,7 +164,7 @@
     "slug": "diff-view",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "DiffView — a scrollable unified diff viewer with +/- line coloring",
+    "description": "DiffView: a scrollable unified diff viewer with +/- line coloring",
     "tags": [
       "display",
       "diff-view"
@@ -228,7 +228,7 @@
     "slug": "big-text",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Color for the rendered characters",
+    "description": "BigText: renders text as large 5×3 ASCII art banner characters",
     "tags": [
       "display",
       "big-text"
@@ -257,7 +257,7 @@
     "slug": "digits",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Digits — renders a numeric string as large 3-row ASCII art",
+    "description": "Digits: renders a numeric string as large 3-row ASCII art",
     "tags": [
       "display",
       "digits"
@@ -280,7 +280,7 @@
     "slug": "chat-message",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "ChatMessage — displays a single chat message with a colored role badge and word-wrapped content text",
+    "description": "ChatMessage: displays a single chat message with a colored role badge and word-wrapped content text",
     "tags": [
       "display",
       "chat-message"
@@ -315,7 +315,7 @@
     "slug": "pty",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "The command to spawn",
+    "description": "Pty: Terminal Multiplexer widget",
     "tags": [
       "display",
       "pty"
@@ -344,7 +344,7 @@
     "slug": "unordered-list",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Bullet characters per nesting level",
+    "description": "UnorderedList - renders a bulleted list with optional nested children",
     "tags": [
       "display",
       "unordered-list"
@@ -414,7 +414,7 @@
     "slug": "text",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Vertical scroll offset (lines to skip from top)",
+    "description": "Text: renders a string of text with word-wrapping, alignment, and scrolling",
     "tags": [
       "display",
       "text"
@@ -437,7 +437,7 @@
     "slug": "markdown",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Markdown — renders a subset of Markdown syntax in the terminal",
+    "description": "Markdown: renders a subset of Markdown syntax in the terminal",
     "tags": [
       "display",
       "markdown"
@@ -460,7 +460,7 @@
     "slug": "accordion",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Section header title",
+    "description": "Accordion: a group of collapsible sections",
     "tags": [
       "display",
       "accordion"
@@ -513,7 +513,7 @@
     "slug": "j-s-o-n-view",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Pick the foreground color for the value part based on JSON type",
+    "description": "JSONView: a syntax-colored, collapsible JSON viewer",
     "tags": [
       "display",
       "j-s-o-n-view"
@@ -548,7 +548,7 @@
     "slug": "json-to-tree",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Original key (if any) that prefixes the label",
+    "description": "Convert any JSON-compatible value to a TreeNode, optionally prefixed by `key` (the property name or array index in the parent container)",
     "tags": [
       "display",
       "json-to-tree"
@@ -583,7 +583,7 @@
     "slug": "rule",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Line direction",
+    "description": "Rule: a horizontal or vertical divider line with an optional centered title",
     "tags": [
       "display",
       "rule"
@@ -618,7 +618,7 @@
     "slug": "log-view",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Highlight rules: keyword → color",
+    "description": "LogView: scrollable, highlighted log output",
     "tags": [
       "display",
       "log-view"
@@ -688,7 +688,7 @@
     "slug": "stopwatch",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Tick interval in milliseconds",
+    "description": "Stopwatch: counts up from zero, displaying elapsed time",
     "tags": [
       "display",
       "stopwatch"
@@ -711,7 +711,7 @@
     "slug": "shortcut-bar",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Represents an individual shortcut item in the shortcut bar",
+    "description": "ShortcutBar: a horizontal footer bar that displays quick key bindings",
     "tags": [
       "display",
       "shortcut-bar"
@@ -752,7 +752,7 @@
     "slug": "avatar",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Override the dynamically generated color",
+    "description": "Avatar: a widget that displays user initials with a generated color",
     "tags": [
       "display",
       "avatar"
@@ -869,7 +869,7 @@
     "slug": "badge",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Variant determines background color",
+    "description": "Badge: a short inline label with a colored background",
     "tags": [
       "display",
       "badge"
@@ -898,7 +898,7 @@
     "slug": "tooltip",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Tooltip — displays contextual help text",
+    "description": "Tooltip: displays contextual help text",
     "tags": [
       "display",
       "tooltip"
@@ -962,7 +962,7 @@
     "slug": "tool-call",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "ToolCall — displays an AI tool invocation with status indicator, tool name, arguments, and optional result",
+    "description": "ToolCall: displays an AI tool invocation with status indicator, tool name, arguments, and optional result",
     "tags": [
       "display",
       "tool-call"
@@ -1009,7 +1009,7 @@
     "slug": "tool-approval",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "ToolApproval — extends ToolCall with an approval prompt row",
+    "description": "ToolApproval: extends ToolCall with an approval prompt row",
     "tags": [
       "display",
       "tool-approval"
@@ -1138,7 +1138,7 @@
     "slug": "gradient",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Start color (hex string like '#ff0000' or named color string)",
+    "description": "Gradient: text rendered with a smooth color gradient",
     "tags": [
       "display",
       "gradient"
@@ -1179,7 +1179,7 @@
     "slug": "collapsible",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Start open",
+    "description": "Collapsible: a toggleable section with title and body",
     "tags": [
       "display",
       "collapsible"
@@ -1232,7 +1232,7 @@
     "slug": "kbd",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Kbd — an inline label representing a keyboard input",
+    "description": "Kbd: an inline label representing a keyboard input",
     "tags": [
       "display",
       "kbd"
@@ -1261,7 +1261,7 @@
     "slug": "timer",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Duration to count down from in milliseconds",
+    "description": "Timer: counts down from a duration to zero",
     "tags": [
       "display",
       "timer"
@@ -1319,7 +1319,7 @@
     "slug": "streaming-text",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Full text content",
+    "description": "StreamingText: renders text that \"streams in\" token by token with a blinking cursor",
     "tags": [
       "display",
       "streaming-text"
@@ -1360,7 +1360,7 @@
     "slug": "watermark",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Color of the repeated text",
+    "description": "Watermark - fills its area with faint repeating text",
     "tags": [
       "display",
       "watermark"
@@ -1395,7 +1395,7 @@
     "slug": "typewriter",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Characters revealed per tick",
+    "description": "Reveals static text character by character",
     "tags": [
       "display",
       "typewriter"
@@ -1430,7 +1430,7 @@
     "slug": "timeline",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Timeline — renders a vertical list of timeline items",
+    "description": "Timeline: renders a vertical list of timeline items",
     "tags": [
       "display",
       "timeline"
@@ -1453,7 +1453,7 @@
     "slug": "notification-badge",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Notification count to display",
+    "description": "NotificationBadge - a small count label rendered at a corner position",
     "tags": [
       "display",
       "notification-badge"
@@ -1482,7 +1482,7 @@
     "slug": "tree",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Tree — a collapsible tree widget for displaying hierarchical data",
+    "description": "Tree: a collapsible tree widget for displaying hierarchical data",
     "tags": [
       "display",
       "tree"
@@ -1533,7 +1533,7 @@
     "slug": "stepper",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Step label",
+    "description": "Stepper: renders a sequence of steps with status indicators",
     "tags": [
       "display",
       "stepper"
@@ -1621,7 +1621,7 @@
     "slug": "link",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "The target URL for the OSC 8 hyperlink anchor",
+    "description": "Whether to append the URL visually when terminal capabilities lack unicode/OSC 8 support",
     "tags": [
       "display",
       "link"
@@ -1662,7 +1662,7 @@
     "slug": "placeholder",
     "package": "@termuijs/widgets",
     "category": "display",
-    "description": "Fill character",
+    "description": "Placeholder - a labeled stand-in box for prototyping terminal layouts",
     "tags": [
       "display",
       "placeholder"
@@ -1703,7 +1703,7 @@
     "slug": "scrollbar",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Total number of content items",
+    "description": "Show begin/end arrow symbols",
     "tags": [
       "feedback",
       "scrollbar"
@@ -1762,7 +1762,7 @@
     "slug": "alert",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Variant determines icon and border color",
+    "description": "Alert: full-width status message box with a colored border and an icon prefix",
     "tags": [
       "feedback",
       "alert"
@@ -1791,7 +1791,7 @@
     "slug": "banner",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Variant determines border color",
+    "description": "Banner: full-width alert with title and body text",
     "tags": [
       "feedback",
       "banner"
@@ -1891,7 +1891,7 @@
     "slug": "status-message",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Variant determines icon and color",
+    "description": "StatusMessage: a single-line status indicator",
     "tags": [
       "feedback",
       "status-message"
@@ -1926,7 +1926,7 @@
     "slug": "spinner",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Alias for `dots`",
+    "description": "Spinner: animated loading indicator",
     "tags": [
       "feedback",
       "spinner"
@@ -2091,7 +2091,7 @@
     "slug": "loading-dots",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Label shown before the dots",
+    "description": "Dot color",
     "tags": [
       "feedback",
       "loading-dots"
@@ -2142,7 +2142,7 @@
     "slug": "task-list",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "When true, the running indicator animates with a spinner",
+    "description": "TaskList: a vertical list of tasks with status indicators",
     "tags": [
       "feedback",
       "task-list"
@@ -2189,7 +2189,7 @@
     "slug": "progress-bar",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "Current value (0–1)",
+    "description": "ProgressBar: horizontal progress indicator",
     "tags": [
       "feedback",
       "progress-bar"
@@ -2248,7 +2248,7 @@
     "slug": "multi-progress",
     "package": "@termuijs/widgets",
     "category": "feedback",
-    "description": "A single progress item in MultiProgress",
+    "description": "MultiProgress: stacks multiple labeled progress bars in a vertical list",
     "tags": [
       "feedback",
       "multi-progress"
@@ -2377,7 +2377,7 @@
     "slug": "context-menu",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "ContextMenu — a floating menu widget positioned at absolute coordinates",
+    "description": "ContextMenu: a floating menu widget positioned at absolute coordinates",
     "tags": [
       "input",
       "context-menu"
@@ -2412,7 +2412,7 @@
     "slug": "command-palette",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "Placeholder shown when query is empty",
+    "description": "CommandPalette: a fuzzy-search overlay widget",
     "tags": [
       "input",
       "command-palette"
@@ -2453,7 +2453,7 @@
     "slug": "checkbox",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "Initial checked state",
+    "description": "Checkbox: a toggleable boolean input with a label",
     "tags": [
       "input",
       "checkbox"
@@ -2571,7 +2571,7 @@
     "slug": "button",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "Show a loading spinner and suppress activation while true (default: false)",
+    "description": "Button: a pressable button with a label and visual variants",
     "tags": [
       "input",
       "button"
@@ -2724,7 +2724,7 @@
     "slug": "text-input",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "TextInput — a single-line text input field with optional command auto-completion support",
+    "description": "TextInput: a single-line text input field with optional command auto-completion support",
     "tags": [
       "input",
       "text-input"
@@ -2777,7 +2777,7 @@
     "slug": "list",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "External state object – if provided, List reads/writes selection through it",
+    "description": "List: a scrollable, selectable list of items",
     "tags": [
       "input",
       "list"
@@ -2800,7 +2800,7 @@
     "slug": "virtual-list",
     "package": "@termuijs/widgets",
     "category": "input",
-    "description": "Total number of items (the full dataset size)",
+    "description": "VirtualList: a scroll-virtualized list widget",
     "tags": [
       "input",
       "virtual-list"
@@ -2962,7 +2962,7 @@
     "slug": "panel",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Required title shown in the top border",
+    "description": "Panel: a labeled container widget",
     "tags": [
       "layout",
       "panel"
@@ -3078,7 +3078,7 @@
     "slug": "stack",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Which child is on top (receives key events)",
+    "description": "Stack: a widget that layers children on top of each other",
     "tags": [
       "layout",
       "stack"
@@ -3107,7 +3107,7 @@
     "slug": "scroll-view",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Total height of content in rows",
+    "description": "ScrollView: a height-bounded scrollable container",
     "tags": [
       "layout",
       "scroll-view"
@@ -3142,7 +3142,7 @@
     "slug": "columns",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Gap between columns in cells (default: 1)",
+    "description": "Columns: splits available width evenly across child widgets",
     "tags": [
       "layout",
       "columns"
@@ -3165,7 +3165,7 @@
     "slug": "card",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Optional title shown in the top border",
+    "description": "Card: a bordered container with an optional title in the top border",
     "tags": [
       "layout",
       "card"
@@ -3194,7 +3194,7 @@
     "slug": "aspect-ratio",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Width:height ratio",
+    "description": "contain = fit inside, cover = fill",
     "tags": [
       "layout",
       "aspect-ratio"
@@ -3252,7 +3252,7 @@
     "slug": "center",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Center horizontally (default: true)",
+    "description": "Center: centers a single child widget horizontally and/or vertically",
     "tags": [
       "layout",
       "center"
@@ -3281,7 +3281,7 @@
     "slug": "divider",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Direction of the divider line",
+    "description": "Divider: a horizontal or vertical separator line with optional label",
     "tags": [
       "layout",
       "divider"
@@ -3322,7 +3322,7 @@
     "slug": "split-pane",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "SplitPane — two-pane resizable layout widget",
+    "description": "SplitPane: two-pane resizable layout widget",
     "tags": [
       "layout",
       "split-pane"
@@ -3404,7 +3404,7 @@
     "slug": "masonry",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Number of columns",
+    "description": "Vertical gap between items",
     "tags": [
       "layout",
       "masonry"
@@ -3452,7 +3452,7 @@
     "slug": "grid",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "CSS grid-template-columns track definitions, e.g",
+    "description": "Grid: a true CSS-Grid-like layout container",
     "tags": [
       "layout",
       "grid"
@@ -3487,7 +3487,7 @@
     "slug": "grid-item",
     "package": "@termuijs/widgets",
     "category": "layout",
-    "description": "Add an item explicitly (alias for addChild)",
+    "description": "GridItem: a child container that can define grid column/row spans or starts",
     "tags": [
       "layout",
       "grid-item"
@@ -3522,7 +3522,7 @@
     "slug": "bullet-chart",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "BulletChart — a metric display with target marker and qualitative range bands",
+    "description": "BulletChart: a metric display with target marker and qualitative range bands",
     "tags": [
       "data",
       "bullet-chart"
@@ -3569,7 +3569,7 @@
     "slug": "hexdump",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Bytes per row",
+    "description": "Character shown for non-printable bytes in ASCII column",
     "tags": [
       "data",
       "hexdump"
@@ -3598,7 +3598,7 @@
     "slug": "tree-table",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Column header label",
+    "description": "TreeTable: combines Tree expand/collapse with Table columns",
     "tags": [
       "data",
       "tree-table"
@@ -3669,7 +3669,7 @@
     "slug": "table",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Column header label",
+    "description": "Table: renders tabular data with columns, headers, and optional zebra-striping",
     "tags": [
       "data",
       "table"
@@ -3728,7 +3728,7 @@
     "slug": "radar-chart",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "One value per axis, range [0, 1]",
+    "description": "Axis names, one per spoke",
     "tags": [
       "data",
       "radar-chart"
@@ -3792,7 +3792,7 @@
     "slug": "definition",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Indentation for definition lines (default: 2)",
+    "description": "Definition: term + definition pairs, stacked vertically",
     "tags": [
       "data",
       "definition"
@@ -3839,7 +3839,7 @@
     "slug": "data-grid",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Whether the column can be sorted",
+    "description": "Callback fired when the filter changes",
     "tags": [
       "data",
       "data-grid"
@@ -3880,7 +3880,7 @@
     "slug": "use-list-state",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "External state object for List widget",
+    "description": "Hook that creates a fresh ListState",
     "tags": [
       "data",
       "use-list-state"
@@ -3934,7 +3934,7 @@
     "slug": "bar-chart",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Direction bars grow",
+    "description": "Color for text labels",
     "tags": [
       "data",
       "bar-chart"
@@ -4046,7 +4046,7 @@
     "slug": "sparkline",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color of the sparkline",
+    "description": "Sparkline: a compact inline chart showing a data trend",
     "tags": [
       "data",
       "sparkline"
@@ -4087,7 +4087,7 @@
     "slug": "candlestick-chart",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color for bullish (close > open) candles",
+    "description": "CandlestickChart: renders OHLC candle data as a terminal chart",
     "tags": [
       "data",
       "candlestick-chart"
@@ -4122,7 +4122,7 @@
     "slug": "line-chart",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color of the plotted points/lines",
+    "description": "LineChart: ASCII/Unicode line plot for a series of numbers",
     "tags": [
       "data",
       "line-chart"
@@ -4210,7 +4210,7 @@
     "slug": "use-table-state",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "External state object for Table widget",
+    "description": "Hook that creates a fresh TableState",
     "tags": [
       "data",
       "use-table-state"
@@ -4287,7 +4287,7 @@
     "slug": "meter",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Value below this fraction renders the low color",
+    "description": "Meter: a self-contained metric display with label, bar, and value with low/optimum/high thresholds",
     "tags": [
       "data",
       "meter"
@@ -4422,7 +4422,7 @@
     "slug": "status-indicator",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color when up/active",
+    "description": "StatusIndicator: simple up/down indicator with label",
     "tags": [
       "data",
       "status-indicator"
@@ -4463,7 +4463,7 @@
     "slug": "scatter-plot",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "X axis label",
+    "description": "Point marker",
     "tags": [
       "data",
       "scatter-plot"
@@ -4504,7 +4504,7 @@
     "slug": "key-value",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Separator between key and value (default: ': ')",
+    "description": "KeyValue: aligned key: value pairs",
     "tags": [
       "data",
       "key-value"
@@ -4539,7 +4539,7 @@
     "slug": "gauge",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color of the filled portion",
+    "description": "Gauge: a self-contained metric display with label, bar, and value",
     "tags": [
       "data",
       "gauge"
@@ -4574,7 +4574,7 @@
     "slug": "heat-map",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Color for maximum value cells",
+    "description": "HeatMap: 2D matrix displayed with character-density shading",
     "tags": [
       "data",
       "heat-map"
@@ -4621,7 +4621,7 @@
     "slug": "sidebar",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Whether the sidebar is collapsed",
+    "description": "Sidebar: a vertical list of navigation items with optional badges",
     "tags": [
       "data",
       "sidebar"
@@ -4668,7 +4668,7 @@
     "slug": "line-gauge",
     "package": "@termuijs/widgets",
     "category": "data",
-    "description": "Filled portion character",
+    "description": "Show percentage label at right",
     "tags": [
       "data",
       "line-gauge"
@@ -4728,7 +4728,7 @@
     "slug": "use-modal",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "True when a modal is currently active",
+    "description": "useModal: typed modal manager with queueing and cleanup",
     "tags": [
       "hook",
       "use-modal"
@@ -4767,7 +4767,7 @@
     "slug": "a-u-d-i-b-l-e_-f-e-e-d-b-a-c-k_-t-y-p-e-s",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "Set false to silence all feedback (e.g",
+    "description": "Types that produce an audible bell",
     "tags": [
       "hook",
       "a-u-d-i-b-l-e_-f-e-e-d-b-a-c-k_-t-y-p-e-s"
@@ -4806,7 +4806,7 @@
     "slug": "use-focus-within",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "List of focusable element IDs to check against",
+    "description": "useFocusWithin: check if focus is within a list of IDs",
     "tags": [
       "hook",
       "use-focus-within"
@@ -4845,7 +4845,7 @@
     "slug": "use-keyboard-navigation",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "Total number of items in the list",
+    "description": "useKeyboardNavigation: arrow-key list navigation with wrap/clamp support",
     "tags": [
       "hook",
       "use-keyboard-navigation"
@@ -4871,7 +4871,7 @@
     "slug": "use-focus",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "Unique identifier for this focusable element",
+    "description": "useFocus: consume focus state for a focusable element",
     "tags": [
       "hook",
       "use-focus"
@@ -4884,7 +4884,7 @@
     "slug": "use-throttle",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useThrottle — throttle a changing value",
+    "description": "useThrottle: throttle a changing value",
     "tags": [
       "hook",
       "use-throttle"
@@ -4897,7 +4897,7 @@
     "slug": "use-timeout",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useTimeout — run a callback once after a delay",
+    "description": "useTimeout: run a callback once after a delay",
     "tags": [
       "hook",
       "use-timeout"
@@ -4949,7 +4949,7 @@
     "slug": "detect-package-manager",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "Install a package, or run bare install if no pkg given",
+    "description": "Detect the running package manager from environment variables",
     "tags": [
       "hook",
       "detect-package-manager"
@@ -4988,7 +4988,7 @@
     "slug": "use-stopwatch",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useStopwatch — tracks elapsed time with start, pause, and reset controls",
+    "description": "useStopwatch: tracks elapsed time with start, pause, and reset controls",
     "tags": [
       "hook",
       "use-stopwatch"
@@ -5014,7 +5014,7 @@
     "slug": "use-debounce",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useDebounce — debounce a changing value",
+    "description": "useDebounce: debounce a changing value",
     "tags": [
       "hook",
       "use-debounce"
@@ -5027,7 +5027,7 @@
     "slug": "use-focus-manager",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "The FocusContext object — use its Provider to supply focus state to children",
+    "description": "useFocusManager: manages focus state for a subtree",
     "tags": [
       "hook",
       "use-focus-manager"
@@ -5040,7 +5040,7 @@
     "slug": "use-countdown",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useCountdown — counts down from a start value with start, pause, and reset controls",
+    "description": "useCountdown: counts down from a start value with start, pause, and reset controls",
     "tags": [
       "hook",
       "use-countdown"
@@ -5053,7 +5053,7 @@
     "slug": "use-element-size",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useElementSize — track the size of a widget element",
+    "description": "useElementSize: track the size of a widget element",
     "tags": [
       "hook",
       "use-element-size"
@@ -5066,7 +5066,7 @@
     "slug": "use-clipboard",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "Timeout in milliseconds after which copied state is reset to false",
+    "description": "useClipboard: interact with the system clipboard",
     "tags": [
       "hook",
       "use-clipboard"
@@ -5079,7 +5079,7 @@
     "slug": "use-focus-trap",
     "package": "@termuijs/jsx",
     "category": "hook",
-    "description": "useFocusTrap — cycle Tab / Shift+Tab focus through a fixed list of IDs",
+    "description": "useFocusTrap: cycle Tab / Shift+Tab focus through a fixed list of IDs",
     "tags": [
       "hook",
       "use-focus-trap"
@@ -5200,7 +5200,7 @@
     "slug": "radio-group",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "RadioGroup — renders a vertical list of mutually exclusive options",
+    "description": "RadioGroup: renders a vertical list of mutually exclusive options",
     "tags": [
       "template",
       "radio-group"
@@ -5282,7 +5282,7 @@
     "slug": "autocomplete",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "List of search suggestions / candidates",
+    "description": "Highlight color for the selected suggestion",
     "tags": [
       "template",
       "autocomplete"
@@ -5376,7 +5376,7 @@
     "slug": "popover",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "The placement of the popover relative to the anchor",
+    "description": "The specific terminal coordinates (row/col) to anchor this popover to",
     "tags": [
       "template",
       "popover"
@@ -6106,7 +6106,7 @@
     "slug": "menu",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Menu — a vertical list of interactive items supporting keyboard navigation, shortcuts, and disabled states",
+    "description": "Menu: a vertical list of interactive items supporting keyboard navigation, shortcuts, and disabled states",
     "tags": [
       "template",
       "menu"
@@ -6414,7 +6414,7 @@
     "slug": "prompt",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Imperative prompts for CLI scripts — no widget stack required",
+    "description": "Imperative prompts for CLI scripts: no widget stack required",
     "tags": [
       "template",
       "prompt"
@@ -6571,7 +6571,7 @@
     "slug": "file-picker",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "A single entry shown in the file picker list",
+    "description": "FilePicker: an interactive file browser widget",
     "tags": [
       "template",
       "file-picker"
@@ -6917,7 +6917,7 @@
     "slug": "masked-input",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Mask template",
+    "description": "Color for the text",
     "tags": [
       "template",
       "masked-input"
@@ -7063,7 +7063,7 @@
     "slug": "rating",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Total number of stars",
+    "description": "Rating: renders a row of star glyphs for a 1-to-N rating",
     "tags": [
       "template",
       "rating"
@@ -7308,7 +7308,7 @@
     "slug": "path-input",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "PathInput — filesystem path input with Tab-completion",
+    "description": "PathInput: filesystem path input with Tab-completion",
     "tags": [
       "template",
       "path-input"
@@ -7390,7 +7390,7 @@
     "slug": "drawer",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "The edge from which the drawer slides into view",
+    "description": "Drawer: a side panel that slides in from any edge",
     "tags": [
       "template",
       "drawer"
@@ -7449,7 +7449,7 @@
     "slug": "text-area",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Number of visible rows (default: 4)",
+    "description": "TextArea - a multi-line text input field",
     "tags": [
       "template",
       "text-area"
@@ -7595,7 +7595,7 @@
     "slug": "keyboard-shortcuts",
     "package": "@termuijs/ui",
     "category": "template",
-    "description": "Color for the key label boxes",
+    "description": "A group of bindings belonging to the same category",
     "tags": [
       "template",
       "keyboard-shortcuts"
