@@ -83,12 +83,12 @@ export function batch<T>(fn: () => T): T {
         return (res as Promise<any>).then(
             (val) => {
                 _batchDepth--;
-                if (_batchDepth === 0) flushBatch(false);
+                if (_batchDepth === 0) flushBatch(false, true);
                 return val;
             },
             (err) => {
                 _batchDepth--;
-                if (_batchDepth === 0) flushBatch(true);
+                if (_batchDepth === 0) flushBatch(true, true);
                 throw err;
             }
         ) as T;
@@ -101,7 +101,7 @@ export function batch<T>(fn: () => T): T {
     }
 }
 
-function flushBatch(threw: boolean) {
+function flushBatch(threw: boolean, immediate = false) {
     if (threw) {
         for (const [, { rollback }] of _batchStores) {
             rollback();
@@ -112,8 +112,8 @@ function flushBatch(threw: boolean) {
         // Snapshot the current epoch so the microtask can bail out if a new
         // batch has started before it runs.
         const epochAtFlush = _batchEpoch;
-        queueMicrotask(() => {
-            // A new batch started between the flush and this microtask — skip.
+        const notify = () => {
+            // A new batch started between flush and notify — skip.
             if (_batchEpoch !== epochAtFlush) return;
             const stores = Array.from(_batchStores.entries());
             _batchStores.clear();
@@ -123,7 +123,12 @@ function flushBatch(threw: boolean) {
                     listener(newState, prevState);
                 }
             }
-        });
+        };
+        if (immediate) {
+            notify();
+        } else {
+            queueMicrotask(notify);
+        }
     }
 }
 
