@@ -189,7 +189,7 @@ console.log(`[generate-llm-docs] Generated ${count} .md files in public/docs/`)
 const llmsTxtLines = [
   '# TermUI',
   '',
-  '> TypeScript framework for building terminal user interfaces.',
+  '> TypeScript framework for building terminal apps (UI, routing, state, data, dev server).',
   '> 15 packages, 230 components, MIT license, Node.js 18+, zero C extensions.',
   '> Own JSX runtime (no React dependency). Flexbox layout, CSS-like theming,',
   '> spring animations, history-based routing, Zustand-style state, hot-reload dev server.',

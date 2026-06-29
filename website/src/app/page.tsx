@@ -20,7 +20,7 @@ const faqSchema = {
       name: 'What is TermUI?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'TermUI is a TypeScript framework for building terminal user interfaces. It provides a layout engine, JSX support, React-style hooks, context, global state management, theming, animations, routing, and a hot-reload dev server. It uses no C extensions and runs in pure TypeScript.',
+        text: 'TermUI is a TypeScript framework for building terminal apps. It is a full framework, not only a UI library: a layout engine, a JSX runtime, hooks, context, global state, theming, animations, routing, system data providers, a test renderer, and a hot-reload dev server. It uses no C extensions and runs in pure TypeScript.',
       },
     },
     {
@@ -108,7 +108,7 @@ const faqSchema = {
       name: 'What is the best TypeScript terminal app framework?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'TermUI is a TypeScript-first terminal UI framework with 15 packages covering components, JSX, theming (TSS), routing, spring animations, global state, hot reload, testing, and adapters. Ink is the main alternative; it reuses React but has no built-in router, animations, or hot reload.',
+        text: 'TermUI is a TypeScript-first framework for terminal apps with 15 packages covering components, JSX, theming (TSS), routing, spring animations, global state, system data, hot reload, testing, and adapters. Ink is the main alternative; it reuses React but has no built-in router, animations, or hot reload.',
       },
     },
   ],

@@ -4,9 +4,9 @@ import { CompareTable } from '@/components/compare/CompareTable'
 
 const SITE = 'https://termui.io'
 const CANONICAL = '/compare/ink'
-const TITLE = 'TermUI vs Ink: a terminal UI framework with no React dependency'
+const TITLE = 'TermUI vs Ink: a terminal app framework with no React dependency'
 const DESCRIPTION =
-    'TermUI and Ink both bring JSX and hooks to the terminal. Ink depends on React and Yoga. TermUI ships its own JSX runtime with flexbox layout, TSS theming, a router, a store, and a hot-reload dev server. Compare features, install size, and APIs.'
+    'TermUI and Ink both bring JSX and hooks to the terminal. Ink is a React renderer for terminal UIs. TermUI is a full framework for terminal apps: its own JSX runtime, flexbox layout, TSS theming, a router, a store, system data, and a hot-reload dev server, with no React dependency.'
 
 export const metadata: Metadata = {
     title: TITLE,
