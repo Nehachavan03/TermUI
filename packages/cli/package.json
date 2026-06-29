@@ -1,6 +1,6 @@
 {
-  "name": "@termuijs/cli",
-  "version": "0.1.0",
+  "name": "termuijs",
+  "version": "0.1.1",
   "description": "Add TermUI components to your project — npx termuijs add <name>",
   "homepage": "https://www.termui.io",
   "repository": { "type": "git", "url": "https://github.com/Karanjot786/TermUI" },
