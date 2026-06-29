@@ -34,7 +34,7 @@ export function useTemperature(intervalMs = 5000): UseTemperatureResult {
                 } else if (platform === 'darwin') {
                     throw new Error('Temperature reading is not supported on macOS');
                 } else if (platform === 'win32') {
-                    const stdout = await execFileAsync(
+                    const { stdout } = await execFileAsync(
                         'wmic',
                         ['/namespace:\\\\root\\wmi', 'PATH', 'MSAcpi_ThermalZoneTemperature', 'get', 'CurrentTemperature'],
                         { timeout: 2000 },
